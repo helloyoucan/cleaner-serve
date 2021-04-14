@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"cleaner-serve/controller"
+	"cleaner-serve/internal/controller"
 	"github.com/gin-gonic/gin"
 )
 

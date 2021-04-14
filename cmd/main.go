@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cleaner-serve/routers"
+	"cleaner-serve/internal/routers"
 	"fmt"
 )
 
