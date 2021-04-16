@@ -1,30 +1,39 @@
 package dao
 
-import "cleaner-serve/internal/models"
-
-func CreateACoupon(coupon *models.Coupon) (err error){
+import (
+	"cleaner-serve/internal/models"
+)
+/**
+优惠券的操作
+ */
+func CreateACoupon(coupon *models.Coupon) (err error) {
 	return DB.Create(&coupon).Error
 }
-func GetAllCoupon()(couponList []*models.Coupon,err error)  {
+func GetAllCoupon() (couponList []*models.Coupon, err error) {
 	err = DB.Find(&couponList).Error
-	if  err != nil {
-		return nil, err
-	}
-	return 
-}
-func GetUserCouponByUseId(userId string)(couponList []*models.Coupon,err error)  {
-	var userCouponList []*models.UserCoupon
-	err =DB.Find(&userCouponList).Error
-	if  err != nil {
-		return nil, err
-	}
-	couponList,err = getCouponsByCouponIds(userCouponList)
-	if  err != nil {
+	if err != nil {
 		return nil, err
 	}
 	return
-
 }
-func getCouponsByCouponIds(userCouponList []*models.UserCoupon)(couponList []*models.Coupon,err error)  {
+// 根据多个id获取优惠券
+func GetAllCouponByCouponIds(ids []uint) (couponList []*models.Coupon, err error) {
+	if len(ids) == 0 {
+		return couponList, nil
+	}
+	var db = DB.Where("id = ?", ids[0])
+	for _, v := range ids[1:] {
+		db = db.Or("id = ?", v)
+	}
+	err = db.Find(&couponList).Error
+	return
+}
+
+func UpdateACoupon(coupon *models.Coupon)(err error)  {
+	err=DB.Save(&coupon).Error
+	return
+}
+func DeleteACoupon(id string)(err error)  {
+	err = DB.Where("id=?",id).Delete(&models.Coupon{}).Error
 	return
 }
