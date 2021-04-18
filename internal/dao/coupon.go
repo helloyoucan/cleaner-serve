@@ -3,9 +3,10 @@ package dao
 import (
 	"cleaner-serve/internal/models"
 )
+
 /**
 优惠券的操作
- */
+*/
 func CreateACoupon(coupon *models.Coupon) (err error) {
 	return DB.Create(&coupon).Error
 }
@@ -16,6 +17,7 @@ func GetAllCoupon() (couponList []*models.Coupon, err error) {
 	}
 	return
 }
+
 // 根据多个id获取优惠券
 func GetAllCouponByCouponIds(ids []uint) (couponList []*models.Coupon, err error) {
 	if len(ids) == 0 {
@@ -28,12 +30,18 @@ func GetAllCouponByCouponIds(ids []uint) (couponList []*models.Coupon, err error
 	err = db.Find(&couponList).Error
 	return
 }
-
-func UpdateACoupon(coupon *models.Coupon)(err error)  {
-	err=DB.Save(&coupon).Error
+func GetACouponById(id string) (coupon *models.Coupon, err error) {
+	err = DB.Where("id=?", id).Find(&coupon).Error
+	if err != nil {
+		return nil, err
+	}
 	return
 }
-func DeleteACoupon(id string)(err error)  {
-	err = DB.Where("id=?",id).Delete(&models.Coupon{}).Error
+func UpdateACoupon(coupon *models.Coupon) (err error) {
+	err = DB.Save(&coupon).Error
+	return
+}
+func DeleteACoupon(id string) (err error) {
+	err = DB.Where("id=?", id).Delete(&models.Coupon{}).Error
 	return
 }
