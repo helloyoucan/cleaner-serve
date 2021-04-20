@@ -2,11 +2,10 @@ package dao
 
 import "cleaner-serve/internal/models"
 
-
-
 func CreateAUserCoupon(userCoupon *models.UserCoupon) (err error) {
 	return DB.Create(&userCoupon).Error
 }
+
 // 通过用户ID获取多个优惠券
 func GetUserCouponByUseId(userId string) (couponList []*models.Coupon, err error) {
 	var userCouponList []*models.UserCoupon
@@ -18,7 +17,7 @@ func GetUserCouponByUseId(userId string) (couponList []*models.Coupon, err error
 	for _, v := range userCouponList {
 		ids = append(ids, v.ID)
 	}
-	couponList, err = getAllCouponByCouponIds(ids)
+	couponList, err = GetAllCouponByCouponIds(ids)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +25,7 @@ func GetUserCouponByUseId(userId string) (couponList []*models.Coupon, err error
 
 }
 
-func UpdateAUserCoupon(userCoupon *models.UserCoupon)(err error)  {
-	err=DB.Save(&userCoupon).Error
+func UpdateAUserCoupon(userCoupon *models.UserCoupon) (err error) {
+	err = DB.Save(&userCoupon).Error
 	return
 }

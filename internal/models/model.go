@@ -2,9 +2,10 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
-type baseCoupon struct {
+type BaseCoupon struct {
 	ID          uint   `gorm:"primary_key"`
 	Name        string `json:"name"`
 	StartTime   int64  `json:"start_time"`
@@ -15,7 +16,9 @@ type baseCoupon struct {
 // 优惠券
 type Coupon struct {
 	gorm.Model
-	baseCoupon
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
 }
 
 // 用户拥有的优惠券
@@ -40,7 +43,7 @@ type Machine struct {
 type Order struct {
 	gorm.Model
 	Branch             *Branch            `json:"branch"` //服务网点
-	ClientInfoId       *uint               `json:"client_info_id"`
+	ClientInfoId       *uint              `json:"client_info_id"`
 	Status             uint8              `json:"status"`
 	StartTime          int64              `json:"start_time"`
 	EndTime            int64              `json:"end_time"`
@@ -48,9 +51,9 @@ type Order struct {
 	ExtraServices      []baseExtraService `json:"extra_services" gorm:"default:[]ExtraServiceBase"`
 	Distance           uint64             `json:"distance"`            //距离网点
 	ExtraDistanceCost  uint64             `json:"extra_distance_cost"` // 超出服务范围的费用
-	Coupons            []baseCoupon       `json:"coupons"`
+	Coupons            []BaseCoupon       `json:"coupons"`
 	TotalPrice         float64            `json:"total_price"`           //总费用
-	WarriorId          *uint               `json:"warrior_id"`            //接单战士id
+	WarriorId          *uint              `json:"warrior_id"`            //接单战士id
 	RefundStatus       uint8              `json:"refund_status"`         //退款状态
 	RefundSArrivalTime int64              `json:"refund_s_arrival_time"` //退款到账时间
 }
@@ -65,7 +68,7 @@ type WarriorInfo struct {
 	Gender         uint8   `json:"gender"`
 	Address        string  `json:"address"`
 	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime"`
-	BelongBranchId *uint    `json:"belong_branch_id"`
+	BelongBranchId *uint   `json:"belong_branch_id"`
 }
 type baseExtraService struct {
 	Name        string  `json:"name"`
@@ -88,6 +91,7 @@ type BaseClientInfo struct {
 	Area     string `json:"area"`
 	address  string `json:"detail"`
 }
+
 // 订单的客户信息
 type ClientInfo struct {
 	gorm.Model

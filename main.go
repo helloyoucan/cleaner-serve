@@ -8,11 +8,11 @@ import (
 )
 
 func main() {
-	err:=dao.InitMysql()
+	err := dao.InitMysql()
 	if err != nil {
 		panic(err)
 	}
-	defer  dao.Close()
+	defer dao.Close()
 	// 模型绑定
 	dao.DB.AutoMigrate(&models.Coupon{})
 	dao.DB.AutoMigrate(&models.UserCoupon{})
