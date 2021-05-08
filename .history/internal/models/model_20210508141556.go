@@ -33,30 +33,31 @@ type UserCoupon struct {
 //机器信息
 type Machine struct {
 	gorm.Model
-	Brand  string `json:"brand"` // 品牌
-	Type   string `json:"type"`
-	Mode   string `json:"mode"`
-	Photos string `json:"photo" gorm:"default:'[]'"`
-	Remark string `json:"remark"  gorm:"default:''"`
+	Brand  string   `json:"brand"` // 品牌
+	Type   string   `json:"type"`
+	Mode   string   `json:"mode"`
+	Photos []string `json:"photo" gorm:"default:[]string{}"`
+	//Photos []string `json:"photo" gorm:"default:[]string{}"` // ?
+	//Remark string   `json:"remark"  gorm:"default:''"`
 }
 
 // 订单
 type Order struct {
 	gorm.Model
-	Branch       *Branch `json:"branch"` //服务网点
-	ClientInfoId *uint   `json:"client_info_id"`
-	Status       uint8   `json:"status"`
-	StartTime    int64   `json:"start_time"`
-	EndTime      int64   `json:"end_time"`
-	Machine      Machine `json:"machine_info" gorm:"embedded;embeddedPrefix:machine_"`
-	// ExtraServices      []baseExtraService `json:"extra_services" gorm:"default:[]ExtraServiceBase"`
-	Distance          uint64 `json:"distance"`            //距离网点
-	ExtraDistanceCost uint64 `json:"extra_distance_cost"` // 超出服务范围的费用
-	// Coupons            []BaseCoupon `json:"coupons"`
-	TotalPrice         float64 `json:"total_price"`           //总费用
-	WarriorId          *uint   `json:"warrior_id"`            //接单战士id
-	RefundStatus       uint8   `json:"refund_status"`         //退款状态
-	RefundSArrivalTime int64   `json:"refund_s_arrival_time"` //退款到账时间
+	Branch             *Branch            `json:"branch"` //服务网点
+	ClientInfoId       *uint              `json:"client_info_id"`
+	Status             uint8              `json:"status"`
+	StartTime          int64              `json:"start_time"`
+	EndTime            int64              `json:"end_time"`
+	Machine            Machine            `json:"machine_info" gorm:"embedded;embeddedPrefix:machine_"`
+	ExtraServices      []baseExtraService `json:"extra_services" gorm:"default:[]ExtraServiceBase"`
+	Distance           uint64             `json:"distance"`            //距离网点
+	ExtraDistanceCost  uint64             `json:"extra_distance_cost"` // 超出服务范围的费用
+	Coupons            []BaseCoupon       `json:"coupons"`
+	TotalPrice         float64            `json:"total_price"`           //总费用
+	WarriorId          *uint              `json:"warrior_id"`            //接单战士id
+	RefundStatus       uint8              `json:"refund_status"`         //退款状态
+	RefundSArrivalTime int64              `json:"refund_s_arrival_time"` //退款到账时间
 }
 
 // 接单服务的战士信息
@@ -90,7 +91,7 @@ type BaseClientInfo struct {
 	Province string `json:"province"`
 	City     string `json:"city"`
 	Area     string `json:"area"`
-	Address  string `json:"address"`
+	address  string `json:"detail"`
 }
 
 // 订单的客户信息
@@ -102,7 +103,7 @@ type ClientInfo struct {
 // 服务网店
 type Branch struct {
 	gorm.Model
-	Name                string  `json:"name"`
+	Name                string  `json："name"`
 	Latitude            int32   `json:"latitude"`
 	Longitude           int32   `json:"longitude"`
 	ContactPerson       *string `json:"contact_person"`

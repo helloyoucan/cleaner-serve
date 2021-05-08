@@ -90,7 +90,7 @@ type BaseClientInfo struct {
 	Province string `json:"province"`
 	City     string `json:"city"`
 	Area     string `json:"area"`
-	Address  string `json:"address"`
+	address  string `json:"detail"`
 }
 
 // 订单的客户信息
@@ -102,7 +102,7 @@ type ClientInfo struct {
 // 服务网店
 type Branch struct {
 	gorm.Model
-	Name                string  `json:"name"`
+	Name                string  `json："name"`
 	Latitude            int32   `json:"latitude"`
 	Longitude           int32   `json:"longitude"`
 	ContactPerson       *string `json:"contact_person"`

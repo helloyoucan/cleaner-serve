@@ -102,7 +102,7 @@ type ClientInfo struct {
 // 服务网店
 type Branch struct {
 	gorm.Model
-	Name                string  `json:"name"`
+	Name                string  `json："name"`
 	Latitude            int32   `json:"latitude"`
 	Longitude           int32   `json:"longitude"`
 	ContactPerson       *string `json:"contact_person"`
