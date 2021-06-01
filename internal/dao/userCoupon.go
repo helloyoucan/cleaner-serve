@@ -2,6 +2,7 @@ package dao
 
 import "cleaner-serve/internal/models"
 
+// 用户领取优惠券
 func CreateAUserCoupon(userCoupon *models.UserCoupon) (err error) {
 	return DB.Create(&userCoupon).Error
 }

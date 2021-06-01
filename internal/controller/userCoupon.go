@@ -15,3 +15,17 @@ func CreateAUserCoupon(c *gin.Context) {
 		"err": err,
 	})
 }
+func GetUserCouponByUseId(c *gin.Context) {
+	userId, ok := c.Params.Get("userId")
+	if !ok {
+		util.RespJSON(c, gin.H{
+			"err": "userId无效",
+		})
+		return
+	}
+	couponList, err := dao.GetUserCouponByUseId(userId)
+	util.RespJSON(c, gin.H{
+		"err":  err,
+		"data": couponList,
+	})
+}
