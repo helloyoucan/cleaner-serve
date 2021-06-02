@@ -4,12 +4,14 @@ import (
 	"cleaner-serve/internal/dao"
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
 func CreateACoupon(c *gin.Context) {
 	var coupon models.Coupon
 	c.BindJSON(&coupon)
+	fmt.Println("---------------------"+coupon.Name)
 	err := dao.CreateACoupon(&coupon)
 	util.RespJSON(c, gin.H{
 		"err": err,
