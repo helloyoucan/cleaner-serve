@@ -2,7 +2,7 @@ package dao
 
 import "cleaner-serve/internal/models"
 
-func CreateAClientInfo(clientInfo *models.ClientInfo) (id uint, err error) {
+func CreateAClientInfo(clientInfo *models.ClientInfo) (id string, err error) {
 	return clientInfo.ID, DB.Create(&clientInfo).Error
 }
 func GetACouponByUserId(id string) (clientInfo []*models.ClientInfo, err error) {

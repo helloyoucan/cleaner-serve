@@ -100,7 +100,7 @@ type WarriorInfo struct {
 
 // 订单的客户信息（地址簿）
 type ClientInfo struct {
-	ID        uint `gorm:"primary_key" gorm:"<-:create"`
+	ID        string `gorm:"primary_key" gorm:"<-:create"`
 	CreatedAt time.Time
 	UpdatedAt time.Time `json:"-"`
 	DeletedAt *time.Time `sql:"index"`
