@@ -16,6 +16,7 @@ func CreateACoupon(c *gin.Context) {
 		})
 		return
 	}
+	coupon.ID=util.UniqueId()
 	err = dao.CreateACoupon(&coupon)
 	util.RespJSON(c, gin.H{
 		"err": err,

@@ -16,6 +16,7 @@ func CreateABranch(c *gin.Context)  {
 		})
 		return
 	}
+	branch.ID=util.UniqueId()
 	err=dao.CreateABranch(&branch)
 	util.RespJSON(c,gin.H{
 		"err":err,

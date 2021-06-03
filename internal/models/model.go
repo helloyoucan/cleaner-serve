@@ -7,7 +7,7 @@ import (
 
 // 优惠券
 type Coupon struct {
-	ID        uint `gorm:"primary_key"`
+	ID        string `gorm:"primary_key" gorm:"<-:create"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
 	DeletedAt *time.Time `json:"-" sql:"index"`
@@ -100,7 +100,10 @@ type WarriorInfo struct {
 
 // 订单的客户信息（地址簿）
 type ClientInfo struct {
-	gorm.Model
+	ID        uint `gorm:"primary_key" gorm:"<-:create"`
+	CreatedAt time.Time
+	UpdatedAt time.Time `json:"-"`
+	DeletedAt *time.Time `sql:"index"`
 	UserId   uint   `json:"user_id"`
 	Name     string `json:"name"`
 	Phone    uint64 `json:"phone"`
@@ -112,7 +115,7 @@ type ClientInfo struct {
 
 // 服务网店
 type Branch struct {
-	ID        uint `gorm:"primary_key"`
+	ID        string `gorm:"primary_key" gorm:"<-:create"`
 	CreatedAt time.Time
 	UpdatedAt time.Time `json:"-"`
 	DeletedAt *time.Time `json:"-" sql:"index"`
