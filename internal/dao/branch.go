@@ -12,8 +12,9 @@ func GetAllBranch() (branchLIst []*models.Branch, err error) {
 	}
 	return
 }
-func GetABranchById(id string) (branchLIst *models.Branch, err error) {
-	err = DB.Where("id=?",id).Find(&branchLIst).Error
+func GetABranchById(id string) (branch *models.Branch, err error) {
+	branch = new(models.Branch)
+	err = DB.Where("id=?",id).Find(&branch).Error
 	if err != nil {
 		return nil, err
 	}

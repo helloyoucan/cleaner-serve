@@ -89,7 +89,7 @@ type Order struct {
 type WarriorInfo struct {
 	gorm.Model
 	Name           string  `json:"name"`
-	Phone          string  `json:"phone"`
+	Phone          uint64  `json:"phone"`
 	Score          float32 `json:"score"` //评分
 	Age            uint8   `json:"age"`
 	Gender         uint8   `json:"gender"`
@@ -103,7 +103,7 @@ type ClientInfo struct {
 	gorm.Model
 	UserId   uint   `json:"user_id"`
 	Name     string `json:"name"`
-	Phone    uint16 `json:"phone"`
+	Phone    uint64 `json:"phone"`
 	Province string `json:"province"`
 	City     string `json:"city"`
 	Area     string `json:"area"`
@@ -112,14 +112,17 @@ type ClientInfo struct {
 
 // 服务网店
 type Branch struct {
-	gorm.Model
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	UpdatedAt time.Time `json:"-"`
+	DeletedAt *time.Time `json:"-" sql:"index"`
 	Name                string  `json:"name"`
 	Latitude            int32   `json:"latitude"`
 	Longitude           int32   `json:"longitude"`
-	ContactPerson       *string `json:"contact_person"`
-	ContactPhone        *uint16 `json:"contact_phone"`
+	ContactPerson       *string `json:"contact_person"` //联系人
+	ContactPhone        *uint64  `json:"contact_phone"`  // 联系人电话
 	WarriorManagerId    *uint   `json:"warrior_manager_id"`     // 管理这个店的战士
 	Range               *uint   `json:"range"`                  //服务范围
-	BaseCost            *uint64 `json:"base_cost"`              //这个网点的基础费用
-	ExtraRangeUnitPrice *uint64 `json:"extra_range_unit_price"` //超出范围的单价
+	BaseCost            *uint64 `json:"base_cost"`              //这个网点的基础费用（单位：分）
+	ExtraRangeUnitPrice *uint64 `json:"extra_range_unit_price"` //超出范围的单价（单位：分）
 }

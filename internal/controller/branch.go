@@ -9,8 +9,14 @@ import (
 
 func CreateABranch(c *gin.Context)  {
 	var branch models.Branch
-	c.BindJSON(&branch)
-	err:=dao.CreateABranch(&branch)
+	err:=c.BindJSON(&branch)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err,
+		})
+		return
+	}
+	err=dao.CreateABranch(&branch)
 	util.RespJSON(c,gin.H{
 		"err":err,
 	})
@@ -23,10 +29,10 @@ func GetAllBranch(c *gin.Context)  {
 	})
 }
 func UpdateABranch(c *gin.Context)  {
-	id,ok:=c.Params.Get("id")
-	if !ok{
-		util.RespJSON(c,gin.H{
-			"err":"id无效",
+	id := c.Query("id")
+	if id=="" {
+		util.RespJSON(c, gin.H{
+			"err": "id无效",
 		})
 		return
 	}
@@ -37,21 +43,36 @@ func UpdateABranch(c *gin.Context)  {
 		})
 		return
 	}
-	c.BindJSON(&branch)
+	err=c.BindJSON(&branch)
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	err=dao.UpdateABranch(branch)
-	util.RespJSON(c,gin.H{
-		"err":err.Error(),
-	})
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c,gin.H{"data":branch,})
 }
 func DeleteABranch(c *gin.Context)  {
-	id,ok:=c.Params.Get("id")
-	if !ok {
-		util.RespJSON(c,gin.H{
-			"err":"id无效",
+	id := c.Query("id")
+	if id=="" {
+		util.RespJSON(c, gin.H{
+			"err": "id无效",
 		})
+		return
 	}
 	err:=dao.DeleteABranch(id)
-	util.RespJSON(c,gin.H{
-		"err":err.Error(),
-	})
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c, gin.H{})
 }
