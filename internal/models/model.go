@@ -2,11 +2,15 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 // 优惠券
 type Coupon struct {
-	gorm.Model
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
+	DeletedAt *time.Time `json:"-" sql:"index"`
 	Name        string `json:"name"`
 	StartTime   int64  `json:"start_time"`
 	EndTime     int64  `json:"end_time"`

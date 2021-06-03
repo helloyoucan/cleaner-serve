@@ -11,7 +11,7 @@ func CreateACoupon(coupon *models.Coupon) (err error) {
 	return DB.Create(&coupon).Error
 }
 func GetAllCoupon() (couponList []*models.Coupon, err error) {
-	err = DB.Find(&couponList).Error
+	err= DB.Find(&couponList).Error
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,8 @@ func GetAllCouponByCouponIds(ids []uint) (couponList []*models.Coupon, err error
 	return
 }
 func GetACouponById(id string) (coupon *models.Coupon, err error) {
-	err = DB.Where("id=?", id).Find(&coupon).Error
+	coupon = new(models.Coupon) //不通过new关键字实例化就会报错
+	err = DB.Where("id = ?", id).Find(&coupon).Error
 	if err != nil {
 		return nil, err
 	}
