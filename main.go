@@ -12,17 +12,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer dao.Close()
 	// 模型绑定
 	dao.DB.AutoMigrate(&models.Coupon{})
 	dao.DB.AutoMigrate(&models.UserCoupon{})
 	dao.DB.AutoMigrate(&models.OrderCoupon{})
-	dao.DB.AutoMigrate(&models.Machine{})
 	dao.DB.AutoMigrate(&models.ExtraService{})
 	dao.DB.AutoMigrate(&models.OrderExtraService{})
 	dao.DB.AutoMigrate(&models.Order{})
 	dao.DB.AutoMigrate(&models.WarriorInfo{})
-	dao.DB.AutoMigrate(&models.ClientInfo{})
 	dao.DB.AutoMigrate(&models.Branch{})
 	r := routers.SetupRouter()
 	r.Run(":8080")

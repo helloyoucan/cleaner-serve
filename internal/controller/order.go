@@ -1,9 +1,7 @@
 package controller
 
 import (
-	"cleaner-serve/internal/logic"
 	"cleaner-serve/internal/util"
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,14 +25,14 @@ type  APIOrder struct {
 		City     string `json:"city"`
 		Area     string `json:"area"`
 		Address  string `json:"address"`
-	} `json:"client_info"`
+	} `json:"client_info" gorm:"embedded;embedded_prefix:client_info_"`
 	Machine struct{
 		Brand         string `json:"brand"` // 品牌
 		Type          string `json:"type"`
 		Mode          string `json:"mode"`
 		PhotosJsonStr string `json:"photos_json_str" gorm:"default:''"`
 		Remark        string `json:"remark"  gorm:"default:''"`
-	} `json:"machine"`
+	} `json:"machine" gorm:"embedded;embedded_prefix:machine_"`
 }
 func CreateAOrder(c *gin.Context)  {
 	var apiOrder APIOrder
@@ -46,7 +44,7 @@ func CreateAOrder(c *gin.Context)  {
 		return
 	}
 	// 创建一条客户信息数据
-	clientInfoId,err := logic.CreateAClientInfo(apiOrder.ClientInfo)
-	fmt.Print("----"+clientInfoId)
+	//clientInfoId,err := logic.CreateAClientInfo(apiOrder.ClientInfo)
+	//fmt.Print("----"+clientInfoId)
 	// 创建一条机器信息数据
 }
