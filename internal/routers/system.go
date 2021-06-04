@@ -11,12 +11,12 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.GET("/login", controller.AdminLogin)
 	// 优惠券
 	systemGroup.POST("/coupon", controller.CreateACoupon)
-	systemGroup.GET("/coupon", controller.GetAllCoupon)
+	systemGroup.GET("/coupon", controller.GetCouponByPages)
 	systemGroup.PUT("/coupon", controller.UpdateACoupon)
 	systemGroup.DELETE("/coupon", controller.DeleteACoupon)
 	//服务网店
 	systemGroup.POST("/branch", controller.CreateABranch)
-	systemGroup.GET("/branch", controller.GetAllBranch)
+	systemGroup.GET("/branch", controller.GetBranchByPages)
 	systemGroup.PUT("/branch", controller.UpdateABranch)
 	systemGroup.DELETE("/branch", controller.DeleteABranch)
 	// 用户领取的优惠券

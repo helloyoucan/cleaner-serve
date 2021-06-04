@@ -1,10 +1,14 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
 	"gorm.io/plugin/soft_delete"
 )
-
+type Pages struct {
+	Page int `json:"page"`
+	PageSize int `json:"page_size"`
+	Total int `json:"total"`
+	TotalPage int `json:"total_page"`
+}
 type BaseBranch struct {
 	Name                string  `json:"name"`
 	Latitude            int32   `json:"latitude"`
@@ -39,7 +43,10 @@ type Coupon struct {
 
 // 用户拥有的优惠券(用户关联，一个用户对多个优惠券)
 type UserCoupon struct {
-	gorm.Model
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 	UserId      uint   `json:"user_id"`
 	Status      uint8  `json:"status"`
 	Name        string `json:"name"`
@@ -50,7 +57,10 @@ type UserCoupon struct {
 
 // 订单使用的拥有的优惠券(订单表关联，一个订单对应多张优惠券)
 type OrderCoupon struct {
-	gorm.Model
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 	UserCouponId uint   `json:"user_coupon_id"`
 	OrderId      uint   `json:"order_id"`
 	Name         string `json:"name"`
@@ -61,7 +71,10 @@ type OrderCoupon struct {
 
 // 附加服务
 type ExtraService struct {
-	gorm.Model
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 	Name        string  `json:"name"`
 	UnitPrice   float32 `json:"unit_price"`
 	Discount    float32 `json:"discount"` //这个服务的折扣
@@ -70,7 +83,10 @@ type ExtraService struct {
 
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）
 type OrderExtraService struct {
-	gorm.Model
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 	OrderId        uint    `json:"order_id"`
 	ExtraServiceId uint    `json:"extra_service_id"`
 	Name           string  `json:"name"`
@@ -80,7 +96,10 @@ type OrderExtraService struct {
 }
 // 订单
 type Order struct {
-	gorm.Model
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 	Status             uint8   `json:"status"` //订单状态
 	TotalPrice         float64 `json:"total_price"`           //总费用
 	WarriorId          *uint   `json:"warrior_id"`            //接单战士id
@@ -122,7 +141,10 @@ type Order struct {
 }
 // 接单服务的战士信息
 type WarriorInfo struct {
-	gorm.Model
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 	Name           string  `json:"name"`
 	Phone          uint64  `json:"phone"`
 	Score          float32 `json:"score"` //评分

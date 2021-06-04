@@ -1,14 +1,23 @@
 package dao
 
-import "cleaner-serve/internal/models"
+import (
+	"cleaner-serve/internal/models"
+	"cleaner-serve/internal/util"
+)
 
 func CreateABranch(branch *models.Branch) (err error) {
 	return DB.Create(&branch).Error
 }
-func GetAllBranch() (branchLIst []*models.Branch, err error) {
-	err = DB.Find(&branchLIst).Error
+func GetBranchByPages(pages *models.Pages) (branchLIst []*models.Branch, err error) {
+	err = DB.Scopes(util.Paginate(pages)).Find(&branchLIst).Error
 	if err != nil {
 		return nil, err
+	}
+	var total int64
+	DB.Model(&models.Branch{}).Count(&total)
+	err= util.HandlePages(pages,total)
+	if err != nil {
+		return branchLIst, err
 	}
 	return
 }

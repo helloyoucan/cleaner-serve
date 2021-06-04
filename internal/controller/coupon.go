@@ -5,6 +5,7 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func CreateACoupon(c *gin.Context) {
@@ -22,11 +23,17 @@ func CreateACoupon(c *gin.Context) {
 		"err": err,
 	})
 }
-func GetAllCoupon(c *gin.Context) {
-	couponList, err := dao.GetAllCoupon()
+func GetCouponByPages(c *gin.Context) {
+	var pages =new (models.Pages)
+	pages.Page,_ = strconv.Atoi(c.Query("page"))
+	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
+	couponList, err := dao.GetCouponByPages(pages)
 	util.RespJSON(c, gin.H{
 		"err":  err,
-		"data": couponList,
+		"data": gin.H{
+			"list":couponList,
+			"pages":pages,
+		},
 	})
 }
 func UpdateACoupon(c *gin.Context) {

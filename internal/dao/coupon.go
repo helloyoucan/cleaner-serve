@@ -2,6 +2,7 @@ package dao
 
 import (
 	"cleaner-serve/internal/models"
+	"cleaner-serve/internal/util"
 )
 
 /**
@@ -10,16 +11,22 @@ import (
 func CreateACoupon(coupon *models.Coupon) (err error) {
 	return DB.Create(&coupon).Error
 }
-func GetAllCoupon() (couponList []*models.Coupon, err error) {
-	err= DB.Find(&couponList).Error
+func GetCouponByPages(pages *models.Pages) (couponList []*models.Coupon, err error) {
+	err= DB.Scopes(util.Paginate(pages)).Find(&couponList).Error
 	if err != nil {
 		return nil, err
+	}
+	var total int64
+	DB.Model(&models.Coupon{}).Count(&total)
+	err= util.HandlePages(pages,total)
+	if err != nil {
+		return couponList, err
 	}
 	return
 }
 
 // 根据多个id获取优惠券
-func GetAllCouponByCouponIds(ids []uint) (couponList []*models.Coupon, err error) {
+func GetAllCouponByCouponIds(ids []string) (couponList []*models.Coupon, err error) {
 	if len(ids) == 0 {
 		return couponList, nil
 	}

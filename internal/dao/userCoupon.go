@@ -14,7 +14,7 @@ func GetUserCouponByUseId(userId string) (couponList []*models.Coupon, err error
 	if err != nil {
 		return nil, err
 	}
-	var ids []uint
+	var ids []string
 	for _, v := range userCouponList {
 		ids = append(ids, v.ID)
 	}
