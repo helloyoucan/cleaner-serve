@@ -49,13 +49,52 @@ type UserCoupon struct {
 	DeletedAt soft_delete.DeletedAt `json:"-" `
 	CouponId string `json:"coupon_id"`
 	UserId      string   `json:"user_id"`
-	Status      uint8  `json:"status"`
+	Status      uint8  `json:"status" gorm:"default:0"`
 	Name        string `json:"name"`
 	StartTime   int64  `json:"start_time"`
 	EndTime     int64  `json:"end_time"`
 	Description string `json:"description"`
 }
 
+
+
+// 附加服务
+type BaseExtraService struct {
+	Name        string  `json:"name"`
+	UnitPrice   int `json:"unit_price"`
+	Discount    float32 `json:"discount"` //这个服务的折扣
+	Description string  `json:"description"`
+}
+type ExtraService struct {
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
+	IsActive int8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
+	BaseExtraService
+}
+
+
+// 接单服务的战士信息
+type Warrior struct {
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
+	Name           string  `json:"name"`
+	IDCard uint `json:"id_card"`
+	Phone          uint64  `json:"phone"`
+	Score          float32 `json:"score"` //评分
+	Age            uint8   `json:"age"`
+	Gender         uint8   `json:"gender"`
+	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime"`
+	BelongBranchId *uint   `json:"belong_branch_id"`
+	Province string `json:"province"`
+	City     string `json:"city"`
+	Area     string `json:"area"`
+	Address  string `json:"address"`
+	Status uint8 `json:"status" gorm:"default:0"` //账号状态
+}
 // 订单使用的拥有的优惠券(订单表关联，一个订单对应多张优惠券)
 type OrderCoupon struct {
 	ID        string `json:"id" gorm:"primary_key;<-:create"`
@@ -69,24 +108,6 @@ type OrderCoupon struct {
 	EndTime      int64  `json:"end_time"`
 	Description  string `json:"description"`
 }
-
-// 附加服务
-type BaseExtraService struct {
-	Name        string  `json:"name"`
-	UnitPrice   int `json:"unit_price"`
-	Discount    float32 `json:"discount"` //这个服务的折扣
-	Description string  `json:"description"`
-}
-
-type ExtraService struct {
-	ID        string `json:"id" gorm:"primary_key;<-:create"`
-	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
-	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
-	DeletedAt soft_delete.DeletedAt `json:"-" `
-	IsActive int8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
-	BaseExtraService
-}
-
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）
 type OrderExtraService struct {
 	ID        string `json:"id" gorm:"primary_key;<-:create"`
@@ -103,10 +124,10 @@ type Order struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
-	Status             uint8   `json:"status"` //订单状态
+	Status             uint8   `json:"status" gorm:"default:0"` //订单状态
 	TotalPrice         float64 `json:"total_price"`           //总费用
 	WarriorId          *uint   `json:"warrior_id"`            //接单战士id
-	RefundStatus       uint8   `json:"refund_status"`         //退款状态
+	RefundStatus       uint8   `json:"refund_status" gorm:"default:0"`         //退款状态
 	RefundSArrivalTime int64   `json:"refund_s_arrival_time"` //退款到账时间
 	// 接单战士
 	Warrior struct{
@@ -139,22 +160,7 @@ type Order struct {
 		Type          string `json:"type"`
 		Mode          string `json:"mode"`
 		PhotosJsonStr string `json:"photos_json_str" gorm:"default:'[]'"`
-		Remark        string `json:"remark"  gorm:"default:''"`
+		Remark        string `json:"remark" gorm:"default:''"`
 	} `json:"machine" gorm:"embedded;embeddedPrefix:machine_"`
 
-}
-// 接单服务的战士信息
-type WarriorInfo struct {
-	ID        string `json:"id" gorm:"primary_key;<-:create"`
-	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
-	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
-	DeletedAt soft_delete.DeletedAt `json:"-" `
-	Name           string  `json:"name"`
-	Phone          uint64  `json:"phone"`
-	Score          float32 `json:"score"` //评分
-	Age            uint8   `json:"age"`
-	Gender         uint8   `json:"gender"`
-	Address        string  `json:"address"`
-	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime"`
-	BelongBranchId *uint   `json:"belong_branch_id"`
 }

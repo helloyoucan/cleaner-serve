@@ -19,7 +19,7 @@ func main() {
 	dao.DB.AutoMigrate(&models.ExtraService{})
 	dao.DB.AutoMigrate(&models.OrderExtraService{})
 	dao.DB.AutoMigrate(&models.Order{})
-	dao.DB.AutoMigrate(&models.WarriorInfo{})
+	dao.DB.AutoMigrate(&models.Warrior{})
 	dao.DB.AutoMigrate(&models.Branch{})
 	r := routers.SetupRouter()
 	r.Run(":8080")

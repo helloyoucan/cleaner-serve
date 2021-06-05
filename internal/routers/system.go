@@ -29,6 +29,11 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.GET("/extraService/active", controller.GetAllActiveExtraService)
 	systemGroup.PUT("/extraService", controller.UpdateAExtraService)
 	systemGroup.DELETE("/extraService", controller.DeleteAExtraService)
+	// 战士
+	systemGroup.POST("/warrior", controller.CreateAWarrior)
+	systemGroup.GET("/warrior/pages", controller.GetWarriorByPages)
+	systemGroup.PUT("/warrior", controller.UpdateAWarrior)
+	systemGroup.DELETE("/warrior", controller.DeleteAWarrior)
 	// 订单
 	systemGroup.POST("/order", controller.CreateAOrder)
 }
