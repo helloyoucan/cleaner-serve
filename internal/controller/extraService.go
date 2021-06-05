@@ -37,6 +37,16 @@ func GetExtraServiceByPages(c *gin.Context)  {
 		},
 	})
 }
+func GetAllActiveExtraService(c *gin.Context)  {
+	extraServiceList,err:=dao.GetAllActiveExtraService()
+	if err!=nil {
+		util.RespJSON(c,gin.H{
+			"err":err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c,gin.H{"data":extraServiceList,})
+}
 func UpdateAExtraService(c *gin.Context)  {
 	id := c.Query("id")
 	if id=="" {
@@ -45,28 +55,28 @@ func UpdateAExtraService(c *gin.Context)  {
 		})
 		return
 	}
-	branch,err:=dao.GetABranchById(id)
+	extraService,err:=dao.GetAExtraServiceById(id)
 	if err!=nil {
 		util.RespJSON(c,gin.H{
 			"err":err.Error(),
 		})
 		return
 	}
-	err=c.BindJSON(&branch)
+	err=c.BindJSON(&extraService)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
-	err=dao.UpdateABranch(branch)
+	err=dao.UpdateAExtraService(extraService)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
-	util.RespJSON(c,gin.H{"data":branch,})
+	util.RespJSON(c,gin.H{"data":extraService,})
 }
 func DeleteAExtraService(c *gin.Context) {
 	id := c.Query("id")
@@ -76,7 +86,7 @@ func DeleteAExtraService(c *gin.Context) {
 		})
 		return
 	}
-	err := dao.DeleteABranch(id)
+	err := dao.DeleteAExtraService(id)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),

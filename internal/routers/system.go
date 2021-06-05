@@ -24,10 +24,11 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.GET("/user/coupon/:userId", controller.GetUserCouponByUseId)
 	systemGroup.PUT("/user/coupon", controller.UpdateAUserCoupon)
 	// 附加服务
-	//systemGroup.POST("/branch", controller.CreateAExtraService)
-	//systemGroup.GET("/branch", controller.GetBranchByPages)
-	//systemGroup.PUT("/branch", controller.UpdateABranch)
-	//systemGroup.DELETE("/branch", controller.DeleteABranch)
+	systemGroup.POST("/extraService", controller.CreateAExtraService)
+	systemGroup.GET("/extraService/pages", controller.GetExtraServiceByPages)
+	systemGroup.GET("/extraService/active", controller.GetAllActiveExtraService)
+	systemGroup.PUT("/extraService", controller.UpdateAExtraService)
+	systemGroup.DELETE("/extraService", controller.DeleteAExtraService)
 	// 订单
 	systemGroup.POST("/order", controller.CreateAOrder)
 }

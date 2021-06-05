@@ -15,8 +15,8 @@ func GetAllExtraService() (extraServiceLIst []*models.ExtraService, err error) {
 	}
 	return
 }
-func GetExtraServiceByPages(pages *models.Pages) (extraServiceLIst []*models.ExtraService, err error) {
-	err = DB.Scopes(util.Paginate(pages)).Find(&extraServiceLIst).Error
+func GetExtraServiceByPages(pages *models.Pages) (extraServiceList []*models.ExtraService, err error) {
+	err = DB.Scopes(util.Paginate(pages)).Find(&extraServiceList).Error
 	if err != nil {
 		return nil, err
 	}
@@ -24,11 +24,18 @@ func GetExtraServiceByPages(pages *models.Pages) (extraServiceLIst []*models.Ext
 	DB.Model(&models.ExtraService{}).Count(&total)
 	err= util.HandlePages(pages,total)
 	if err != nil {
-		return extraServiceLIst, err
+		return extraServiceList, err
 	}
 	return
 }
-func GetAExtraServiceById(id string) (extraServiceLIst []*models.ExtraService, err error) {
+func GetAllActiveExtraService() (extraServiceList []*models.ExtraService, err error) {
+	err = DB.Where("is_active=?",1).Find(&extraServiceList).Error
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+func GetAExtraServiceById(id string) (extraServiceLIst *models.ExtraService, err error) {
 	err = DB.Where("id=?",id).Find(&extraServiceLIst).Error
 	if err != nil {
 		return nil, err

@@ -73,7 +73,7 @@ type OrderCoupon struct {
 // 附加服务
 type BaseExtraService struct {
 	Name        string  `json:"name"`
-	UnitPrice   float32 `json:"unit_price"`
+	UnitPrice   int `json:"unit_price"`
 	Discount    float32 `json:"discount"` //这个服务的折扣
 	Description string  `json:"description"`
 }
@@ -83,6 +83,7 @@ type ExtraService struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
+	IsActive int8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
 	BaseExtraService
 }
 
@@ -137,7 +138,7 @@ type Order struct {
 		Brand         string `json:"brand"` // 品牌
 		Type          string `json:"type"`
 		Mode          string `json:"mode"`
-		PhotosJsonStr string `json:"photos_json_str" gorm:"default:''"`
+		PhotosJsonStr string `json:"photos_json_str" gorm:"default:'[]'"`
 		Remark        string `json:"remark"  gorm:"default:''"`
 	} `json:"machine" gorm:"embedded;embeddedPrefix:machine_"`
 
