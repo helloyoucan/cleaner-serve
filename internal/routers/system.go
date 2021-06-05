@@ -23,4 +23,5 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.POST("/user/coupon", controller.CreateAUserCoupon)
 	systemGroup.GET("/user/coupon", controller.GetUserCouponByUseId)
 	systemGroup.PUT("/user/coupon", controller.UpdateAUserCoupon)
+	// 订单
 }

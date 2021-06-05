@@ -7,21 +7,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type APIUserCoupon struct {
+	CouponId string `json:"coupon_id"`
+	UserId      string   `json:"user_id"`
+}
 func CreateAUserCoupon(c *gin.Context) {
+	var apiUserCoupon APIUserCoupon
+	c.BindJSON(&apiUserCoupon)
+	if apiUserCoupon.UserId==""{
+		util.RespJSON(c, gin.H{
+			"err": "user_id 无效",
+		})
+		return
+	}
+	if apiUserCoupon.CouponId==""{
+		util.RespJSON(c, gin.H{
+			"err": "coupon_id 无效",
+		})
+		return
+	}
 	var userCoupon models.UserCoupon
-	c.BindJSON(&userCoupon)
-	if userCoupon.UserId==""{
-		util.RespJSON(c, gin.H{
-			"err": "userId 无效",
-		})
-		return
-	}
-	if userCoupon.CouponId==""{
-		util.RespJSON(c, gin.H{
-			"err": "CouponId 无效",
-		})
-		return
-	}
+	userCoupon.UserId = apiUserCoupon.UserId
+	userCoupon.CouponId = apiUserCoupon.CouponId
 	userCoupon.ID=util.UniqueId()
 	coupon,err :=dao.GetACouponById(userCoupon.CouponId)
 	if coupon.ID ==""{
@@ -51,7 +58,7 @@ func GetUserCouponByUseId(c *gin.Context) {
 	userId := c.Query("userId")
 	if userId=="" {
 		util.RespJSON(c, gin.H{
-			"err": "userId无效",
+			"err": "user_id 无效",
 		})
 		return
 	}

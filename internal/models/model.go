@@ -9,6 +9,7 @@ type Pages struct {
 	Total int `json:"total"`
 	TotalPage int `json:"total_page"`
 }
+// 服务网店
 type BaseBranch struct {
 	Name                string  `json:"name"`
 	Latitude            int32   `json:"latitude"`
@@ -20,7 +21,6 @@ type BaseBranch struct {
 	BaseCost            *uint64 `json:"base_cost"`              //这个网点的基础费用（单位：分）
 	ExtraRangeUnitPrice *uint64 `json:"extra_range_unit_price"` //超出范围的单价（单位：分）
 }
-// 服务网店
 type Branch struct {
 	ID        string `json:"id" gorm:"primary_key;<-:create"`
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
@@ -62,8 +62,8 @@ type OrderCoupon struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
-	UserCouponId uint   `json:"user_coupon_id"`
-	OrderId      uint   `json:"order_id"`
+	UserCouponId string   `json:"user_coupon_id"`
+	OrderId      string   `json:"order_id"`
 	Name         string `json:"name"`
 	StartTime    int64  `json:"start_time"`
 	EndTime      int64  `json:"end_time"`
@@ -71,15 +71,19 @@ type OrderCoupon struct {
 }
 
 // 附加服务
+type BaseExtraService struct {
+	Name        string  `json:"name"`
+	UnitPrice   float32 `json:"unit_price"`
+	Discount    float32 `json:"discount"` //这个服务的折扣
+	Description string  `json:"description"`
+}
+
 type ExtraService struct {
 	ID        string `json:"id" gorm:"primary_key;<-:create"`
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
-	Name        string  `json:"name"`
-	UnitPrice   float32 `json:"unit_price"`
-	Discount    float32 `json:"discount"` //这个服务的折扣
-	Description string  `json:"description"`
+	BaseExtraService
 }
 
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）
@@ -88,12 +92,9 @@ type OrderExtraService struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
-	OrderId        uint    `json:"order_id"`
-	ExtraServiceId uint    `json:"extra_service_id"`
-	Name           string  `json:"name"`
-	Cost           float32 `json:"cost"`
-	Discount       float32 `json:"discount"` //这个服务的折扣
-	Description    string  `json:"description"`
+	OrderId        string    `json:"order_id"`
+	ExtraServiceId string    `json:"extra_service_id"`
+	BaseExtraService
 }
 // 订单
 type Order struct {
@@ -106,6 +107,7 @@ type Order struct {
 	WarriorId          *uint   `json:"warrior_id"`            //接单战士id
 	RefundStatus       uint8   `json:"refund_status"`         //退款状态
 	RefundSArrivalTime int64   `json:"refund_s_arrival_time"` //退款到账时间
+	// 接单战士
 	Warrior struct{
 		ID string `json:"id"`
 		Name           string  `json:"name"`
