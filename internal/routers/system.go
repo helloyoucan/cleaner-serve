@@ -22,4 +22,5 @@ func InitAdminRouter(r *gin.Engine) {
 	// 用户领取的优惠券
 	systemGroup.POST("/user/coupon", controller.CreateAUserCoupon)
 	systemGroup.GET("/user/coupon", controller.GetUserCouponByUseId)
+	systemGroup.PUT("/user/coupon", controller.UpdateAUserCoupon)
 }

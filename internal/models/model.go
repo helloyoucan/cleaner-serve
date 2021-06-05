@@ -47,7 +47,8 @@ type UserCoupon struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
-	UserId      uint   `json:"user_id"`
+	CouponId string `json:"coupon_id"`
+	UserId      string   `json:"user_id"`
 	Status      uint8  `json:"status"`
 	Name        string `json:"name"`
 	StartTime   int64  `json:"start_time"`
