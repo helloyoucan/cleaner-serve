@@ -55,8 +55,8 @@ func CreateAUserCoupon(c *gin.Context) {
 
 }
 func GetUserCouponByUseId(c *gin.Context) {
-	userId := c.Query("userId")
-	if userId=="" {
+	userId,isOk :=c.Params.Get("userId")
+	if !isOk ||userId=="" {
 		util.RespJSON(c, gin.H{
 			"err": "user_id 无效",
 		})

@@ -7,7 +7,6 @@ import (
 )
 
 type  APIOrder struct {
-	models.Order
 	ExtraService struct{
 		ID string `json:"id"`
 		models.BaseExtraService
