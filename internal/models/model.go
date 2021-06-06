@@ -56,25 +56,6 @@ type UserCoupon struct {
 	Description string `json:"description"`
 }
 
-
-
-// 附加服务
-type BaseExtraService struct {
-	Name        string  `json:"name"`
-	UnitPrice   int `json:"unit_price"`
-	Discount    float32 `json:"discount"` //这个服务的折扣
-	Description string  `json:"description"`
-}
-type ExtraService struct {
-	ID        string `json:"id" gorm:"primary_key;<-:create"`
-	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
-	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
-	DeletedAt soft_delete.DeletedAt `json:"-" `
-	IsActive int8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
-	BaseExtraService
-}
-
-
 // 接单服务的战士信息
 type Warrior struct {
 	ID        string `json:"id" gorm:"primary_key;<-:create"`
@@ -95,18 +76,36 @@ type Warrior struct {
 	Address  string `json:"address"`
 	Status uint8 `json:"status" gorm:"default:0"` //账号状态
 }
-// 订单使用的拥有的优惠券(订单表关联，一个订单对应多张优惠券)
-type OrderCoupon struct {
+
+// 附加服务
+type BaseExtraService struct {
+	Name        string  `json:"name"`
+	UnitPrice   int `json:"unit_price"`
+	Discount    float32 `json:"discount"` //这个服务的折扣
+	Description string  `json:"description"`
+}
+type ExtraService struct {
 	ID        string `json:"id" gorm:"primary_key;<-:create"`
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
+	IsActive int8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
+	BaseExtraService
+}
+type BaseOrderCoupon struct {
 	UserCouponId string   `json:"user_coupon_id"`
 	OrderId      string   `json:"order_id"`
 	Name         string `json:"name"`
 	StartTime    int64  `json:"start_time"`
 	EndTime      int64  `json:"end_time"`
 	Description  string `json:"description"`
+}
+// 订单使用的拥有的优惠券(订单表关联，一个订单对应多张优惠券)
+type OrderCoupon struct {
+	ID        string `json:"id" gorm:"primary_key;<-:create"`
+	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
+	DeletedAt soft_delete.DeletedAt `json:"-" `
 }
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）
 type OrderExtraService struct {
