@@ -2,7 +2,7 @@ package controller
 
 import (
 	"cleaner-serve/internal/dao"
-	"cleaner-serve/internal/models"
+	"cleaner-serve/internal/logic"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
 )
@@ -26,29 +26,7 @@ func CreateAUserCoupon(c *gin.Context) {
 		})
 		return
 	}
-	var userCoupon models.UserCoupon
-	userCoupon.UserId = apiUserCoupon.UserId
-	userCoupon.CouponId = apiUserCoupon.CouponId
-	userCoupon.ID=util.UniqueId()
-	coupon,err :=dao.GetACouponById(userCoupon.CouponId)
-	if coupon.ID ==""{
-		util.RespJSON(c, gin.H{
-			"err": "优惠券不存在",
-		})
-		return
-	}
-	if err !=nil{
-		util.RespJSON(c, gin.H{
-			"err": err,
-		})
-		return
-	}
-	userCoupon.Name=coupon.Name
-	userCoupon.StartTime=coupon.StartTime
-	userCoupon.EndTime=coupon.EndTime
-	userCoupon.Description=coupon.Description
-	userCoupon.Status=8 //枚举
-	err = dao.CreateAUserCoupon(&userCoupon)
+	err:=logic.CreateAUserCoupon(apiUserCoupon.UserId,apiUserCoupon.CouponId)
 	util.RespJSON(c, gin.H{
 		"err": err,
 	})
@@ -62,7 +40,6 @@ func GetUserCouponByUseId(c *gin.Context) {
 		})
 		return
 	}
-	// todo
 	userCouponList, err := dao.GetUserCouponByUseId(userId)
 	util.RespJSON(c, gin.H{
 		"err":  err,

@@ -8,15 +8,8 @@ import (
 func CreateAOrder(order *models.Order) (err error) {
 	return DB.Create(&order).Error
 }
-func GetAllOrder() (orderLIst []*models.Order, err error) {
-	err = DB.Find(&orderLIst).Error
-	if err != nil {
-		return nil, err
-	}
-	return
-}
-func GetOrderByPages(pages *models.Pages) (orderLIst []*models.Order, err error) {
-	err = DB.Scopes(util.Paginate(pages)).Find(&orderLIst).Error
+func GetOrderByPages(pages *models.Pages) (orderList []*models.Order, err error) {
+	err = DB.Scopes(util.Paginate(pages)).Find(&orderList).Error
 	if err != nil {
 		return nil, err
 	}
@@ -24,12 +17,12 @@ func GetOrderByPages(pages *models.Pages) (orderLIst []*models.Order, err error)
 	DB.Model(&models.Order{}).Count(&total)
 	err= util.HandlePages(pages,total)
 	if err != nil {
-		return orderLIst, err
+		return orderList, err
 	}
 	return
 }
-func GetOrderByUserByPages(pages *models.Pages,userId string) (orderLIst []*models.Order, err error) {
-	err = DB.Where("user_id=?",userId).Scopes(util.Paginate(pages)).Find(&orderLIst).Error
+func GetOrderByUserByPages(pages *models.Pages,userId string) (orderList []*models.Order, err error) {
+	err = DB.Where("user_id=?",userId).Scopes(util.Paginate(pages)).Find(&orderList).Error
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +30,7 @@ func GetOrderByUserByPages(pages *models.Pages,userId string) (orderLIst []*mode
 	DB.Model(&models.Order{}).Where("user_id=?",userId).Count(&total)
 	err= util.HandlePages(pages,total)
 	if err != nil {
-		return orderLIst, err
+		return orderList, err
 	}
 	return
 }
