@@ -1,9 +1,8 @@
 package dao
 
 import (
-	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
-
+	"gorm.io/gorm"
 )
 
 var (
@@ -18,3 +17,4 @@ func InitMysql() (err error) {
 	}
 	return
 }
+

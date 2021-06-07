@@ -2,22 +2,21 @@ package controller
 
 import (
 	"cleaner-serve/internal/dao"
-	"cleaner-serve/internal/logic"
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-type APIOrder struct {
-	Order            models.Order                `json:"order"`
-	ExtraServiceList []*models.OrderExtraService `json:"extra_service_list" gorm:"default:[]"`
-	OrderCouponList  []*models.OrderCoupon       `json:"order_coupon_list" gorm:"default:[]"`
-}
+//type APIOrder struct {
+//	Order            models.Order                `json:"order"`
+//	ExtraServiceList []*models.OrderExtraService `json:"extra_service_list" gorm:"default:[]"`
+//	OrderCouponList  []*models.OrderCoupon       `json:"order_coupon_list" gorm:"default:[]"`
+//}
 
 func CreateAOrder(c *gin.Context) {
-	var apiOrder APIOrder
-	err := c.BindJSON(&apiOrder)
+	var order models.Order
+	err := c.BindJSON(&order)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err,
@@ -25,29 +24,27 @@ func CreateAOrder(c *gin.Context) {
 		return
 	}
 	// 创建订单
-	apiOrder.Order.ID = util.UniqueId()
-	err = dao.CreateAOrder(&apiOrder.Order)
+	err = dao.CreateAOrder(&order)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err,
 		})
 		return
 	}
-	err = logic.CreateExtraServiceList(apiOrder.Order.ID, apiOrder.ExtraServiceList)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err,
-		})
-		return
-	}
-	// 创建订单使用的附加服务
-	err = logic.CreateOrderCouponList(apiOrder.Order.ID, apiOrder.OrderCouponList)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err,
-		})
-		return
-	}
+	//err = logic.CreateExtraServiceList(apiOrder.Order.ID, apiOrder.ExtraServiceList)
+	//if err != nil {
+	//	util.RespJSON(c, gin.H{
+	//		"err": err,
+	//	})
+	//	return
+	//}
+	//err = logic.CreateOrderCouponList(apiOrder.Order.ID, apiOrder.OrderCouponList)
+	//if err != nil {
+	//	util.RespJSON(c, gin.H{
+	//		"err": err,
+	//	})
+	//	return
+	//}
 	util.RespJSON(c, gin.H{})
 }
 
@@ -56,8 +53,13 @@ func GetOrderByPages(c *gin.Context) {
 	pages.Page, _ = strconv.Atoi(c.Query("page"))
 	pages.PageSize, _ = strconv.Atoi(c.Query("page_size"))
 	orderList, err := dao.GetOrderByPages(pages)
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	util.RespJSON(c, gin.H{
-		"err": err,
 		"data": gin.H{
 			"list":  orderList,
 			"pages": pages,
@@ -76,8 +78,13 @@ func GetOrderByUserByPages(c *gin.Context) {
 		return
 	}
 	orderList, err := dao.GetOrderByUserByPages(pages, userId)
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	util.RespJSON(c, gin.H{
-		"err": err,
 		"data": gin.H{
 			"list":  orderList,
 			"pages": pages,

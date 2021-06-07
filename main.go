@@ -7,6 +7,7 @@ import (
 	"fmt"
 )
 
+
 func main() {
 	err := dao.InitMysql()
 	if err != nil {

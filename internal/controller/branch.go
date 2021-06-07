@@ -13,23 +13,31 @@ func CreateABranch(c *gin.Context)  {
 	err:=c.BindJSON(&branch)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
-			"err": err,
+			"err": err.Error(),
 		})
 		return
 	}
-	branch.ID=util.UniqueId()
 	err=dao.CreateABranch(&branch)
-	util.RespJSON(c,gin.H{
-		"err":err,
-	})
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c,gin.H{})
 }
 func GetBranchByPages(c *gin.Context)  {
 	var pages =new (models.Pages)
 	pages.Page,_ = strconv.Atoi(c.Query("page"))
 	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
 	branchList,err:=dao.GetBranchByPages(pages)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	util.RespJSON(c,gin.H{
-		"err":err,
 		"data": gin.H{
 			"list":branchList,
 			"pages":pages,

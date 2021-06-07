@@ -27,9 +27,13 @@ func CreateAUserCoupon(c *gin.Context) {
 		return
 	}
 	err:=logic.CreateAUserCoupon(apiUserCoupon.UserId,apiUserCoupon.CouponId)
-	util.RespJSON(c, gin.H{
-		"err": err,
-	})
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c, gin.H{})
 
 }
 func GetUserCouponByUseId(c *gin.Context) {

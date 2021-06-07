@@ -16,15 +16,15 @@ func GetAllWarrior() (warriorList []*models.Warrior, err error) {
 	return
 }
 func GetWarriorByPages(pages *models.Pages) (warrior []*models.Warrior, err error) {
-	err = DB.Scopes(util.Paginate(pages)).Find(&warrior).Error
-	if err != nil {
-		return nil, err
-	}
 	var total int64
 	DB.Model(&models.Warrior{}).Count(&total)
-	err= util.HandlePages(pages,total)
+	pages.CalcPages(total)
 	if err != nil {
 		return warrior, err
+	}
+	err = DB.Scopes(util.Paginate(pages.Page,pages.PageSize)).Find(&warrior).Error
+	if err != nil {
+		return nil, err
 	}
 	return
 }

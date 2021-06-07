@@ -13,23 +13,31 @@ func CreateACoupon(c *gin.Context) {
 	err:=c.BindJSON(&coupon)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
-			"err": err,
+			"err": err.Error(),
 		})
 		return
 	}
-	coupon.ID=util.UniqueId()
 	err = dao.CreateACoupon(&coupon)
-	util.RespJSON(c, gin.H{
-		"err": err,
-	})
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c, gin.H{})
 }
 func GetCouponByPages(c *gin.Context) {
 	var pages =new (models.Pages)
 	pages.Page,_ = strconv.Atoi(c.Query("page"))
 	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
 	couponList, err := dao.GetCouponByPages(pages)
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	util.RespJSON(c, gin.H{
-		"err":  err,
 		"data": gin.H{
 			"list":couponList,
 			"pages":pages,

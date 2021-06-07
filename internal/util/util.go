@@ -2,11 +2,11 @@ package util
 
 import (
 	"cleaner-serve/internal/errcode"
-	"cleaner-serve/internal/models"
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"io"
@@ -48,34 +48,27 @@ func UniqueId() string {
 	return GetMd5String(base64.URLEncoding.EncodeToString(b))
 }
 
-// 处理获取的分页参数
-func Paginate(pages *models.Pages) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		if pages.Page == 0 {
-			pages.Page = 1
-		}
-		switch {
-		case pages.PageSize > 100:
-			pages.PageSize = 100
-			break
-		case pages.PageSize <= 0:
-			pages.PageSize = 10
-			break
-		}
-		offset := (pages.Page - 1) * pages.PageSize
-		return db.Offset(offset).Limit(pages.PageSize)
-	}
-}
-
-// 处理需要返回的分页参数数据
-func HandlePages(pages *models.Pages, total int64) (err error) {
-	pages.Total, err = strconv.Atoi(strconv.FormatInt(total, 10))
-	if err != nil {
-		return err
-	}
-	pages.TotalPage = pages.Total / pages.PageSize
-	if pages.Total%pages.PageSize != 0 {
-		pages.TotalPage += 1
+// int64转 int
+func Int64ToInt(num int64)(intNum int)  {
+	intNum, err := strconv.Atoi(strconv.FormatInt(num, 10))
+	if err!=nil{
+		fmt.Errorf("int64转 int=>"+err.Error())
+		return 0
 	}
 	return
+}
+// 计算总页数
+func CalcTotalPage(total int,pageSize int) (totalPage int) {
+	totalPage=total/pageSize
+	if total%pageSize != 0 {
+		totalPage += 1
+	}
+	return
+}
+// 处理获取的分页参数
+func Paginate(page int,pageSize int) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		offset := (page - 1) * pageSize
+		return db.Offset(offset).Limit(pageSize)
+	}
 }

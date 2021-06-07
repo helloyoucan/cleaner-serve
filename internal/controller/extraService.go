@@ -13,15 +13,18 @@ func CreateAExtraService(c *gin.Context)  {
 	err:=c.BindJSON(&extraService)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
-			"err": err,
+			"err": err.Error(),
 		})
 		return
 	}
-	extraService.ID=util.UniqueId()
 	err=dao.CreateAExtraService(&extraService)
-	util.RespJSON(c,gin.H{
-		"err":err,
-	})
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c,gin.H{})
 }
 
 func GetExtraServiceByPages(c *gin.Context)  {
@@ -29,8 +32,13 @@ func GetExtraServiceByPages(c *gin.Context)  {
 	pages.Page,_ = strconv.Atoi(c.Query("page"))
 	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
 	extraServiceList,err:=dao.GetExtraServiceByPages(pages)
+	if err != nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	util.RespJSON(c,gin.H{
-		"err":err,
 		"data": gin.H{
 			"list":extraServiceList,
 			"pages":pages,

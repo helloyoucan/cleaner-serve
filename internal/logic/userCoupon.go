@@ -3,7 +3,6 @@ package logic
 import (
 	"cleaner-serve/internal/dao"
 	"cleaner-serve/internal/models"
-	"cleaner-serve/internal/util"
 	"errors"
 )
 
@@ -11,7 +10,6 @@ func CreateAUserCoupon(userId string,couponId string)(err error)  {
 	var userCoupon models.UserCoupon
 	userCoupon.UserId = userId
 	userCoupon.CouponId = couponId
-	userCoupon.ID=util.UniqueId()
 	coupon,err :=dao.GetACouponById(userCoupon.CouponId)
 	if err !=nil{
 		return err

@@ -9,16 +9,17 @@ func CreateABranch(branch *models.Branch) (err error) {
 	return DB.Create(&branch).Error
 }
 func GetBranchByPages(pages *models.Pages) (branchLIst []*models.Branch, err error) {
-	err = DB.Scopes(util.Paginate(pages)).Find(&branchLIst).Error
-	if err != nil {
-		return nil, err
-	}
 	var total int64
 	DB.Model(&models.Branch{}).Count(&total)
-	err= util.HandlePages(pages,total)
+	pages.CalcPages(total)
 	if err != nil {
 		return branchLIst, err
 	}
+	err = DB.Scopes(util.Paginate(pages.Page,pages.PageSize)).Find(&branchLIst).Error
+	if err != nil {
+		return nil, err
+	}
+
 	return
 }
 func GetABranchById(id string) (branch *models.Branch, err error) {

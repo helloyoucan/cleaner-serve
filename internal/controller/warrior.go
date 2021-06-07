@@ -13,23 +13,31 @@ func CreateAWarrior(c *gin.Context)  {
 	err:=c.BindJSON(&warrior)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
-			"err": err,
+			"err": err.Error(),
 		})
 		return
 	}
-	warrior.ID=util.UniqueId()
 	err=dao.CreateAWarrior(&warrior)
-	util.RespJSON(c,gin.H{
-		"err":err,
-	})
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c,gin.H{})
 }
 func GetWarriorByPages(c *gin.Context)  {
 	var pages =new (models.Pages)
 	pages.Page,_ = strconv.Atoi(c.Query("page"))
 	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
 	warriorList,err:=dao.GetWarriorByPages(pages)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
 	util.RespJSON(c,gin.H{
-		"err":err,
 		"data": gin.H{
 			"list":warriorList,
 			"pages":pages,
