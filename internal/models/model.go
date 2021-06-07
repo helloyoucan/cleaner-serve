@@ -16,7 +16,7 @@ type BaseBranch struct {
 	Longitude           int32   `json:"longitude"`
 	ContactPerson       *string `json:"contact_person"` //联系人
 	ContactPhone        *uint64  `json:"contact_phone"`  // 联系人电话
-	WarriorManagerId    *uint   `json:"warrior_manager_id"`     // 管理这个店的战士
+	WarriorManagerId    string   `json:"warrior_manager_id"`     // 管理这个店的战士
 	Range               *uint   `json:"range"`                  //服务范围
 	BaseCost            *uint64 `json:"base_cost"`              //这个网点的基础费用（单位：分）
 	ExtraRangeUnitPrice *uint64 `json:"extra_range_unit_price"` //超出范围的单价（单位：分）
@@ -106,6 +106,7 @@ type OrderCoupon struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
+	BaseOrderCoupon
 }
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）
 type OrderExtraService struct {
@@ -123,16 +124,16 @@ type Order struct {
 	Created   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	Updated   int64 `json:"-" gorm:"autoUpdateTime:milli"`
 	DeletedAt soft_delete.DeletedAt `json:"-" `
+	UserID string `json:"user_id"`
 	Status             uint8   `json:"status" gorm:"default:0"` //订单状态
 	TotalPrice         float64 `json:"total_price"`           //总费用
-	WarriorId          *uint   `json:"warrior_id"`            //接单战士id
 	RefundStatus       uint8   `json:"refund_status" gorm:"default:0"`         //退款状态
-	RefundSArrivalTime int64   `json:"refund_s_arrival_time"` //退款到账时间
+	RefundSArrivalTime *int64   `json:"refund_s_arrival_time"` //退款到账时间
 	// 接单战士
-	Warrior struct{
-		ID string `json:"id"`
-		Name           string  `json:"name"`
-		Phone          uint64  `json:"phone"`
+	Warrior *struct{
+		ID *string `json:"id"`
+		Name           *string  `json:"name"`
+		Phone          *uint64  `json:"phone"`
 		BelongBranchId *uint   `json:"belong_branch_id"`
 	} `json:"warrior" gorm:"embedded;embeddedPrefix:warrior_"`
 	//服务网点信息
@@ -142,7 +143,7 @@ type Order struct {
 	} `json:"branch" gorm:"embedded;embeddedPrefix:branch_"`
 	// 服务地址及联系人信息
 	ClientInfo struct{
-		UserId   uint   `json:"user_id"`
+		UserId   string   `json:"user_id"`
 		Name     string `json:"name"`
 		Phone    uint64 `json:"phone"`
 		Province string `json:"province"`

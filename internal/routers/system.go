@@ -36,4 +36,9 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.DELETE("/warrior", controller.DeleteAWarrior)
 	// 订单
 	systemGroup.POST("/order", controller.CreateAOrder)
+	systemGroup.GET("/order/pages", controller.GetOrderByPages)
+	systemGroup.GET("/order/:userId/pages", controller.GetOrderByUserByPages)
+	systemGroup.GET("/order/user/:orderId", controller.GetAOrder)
+	systemGroup.PUT("/order", controller.UpdateAOrder)
+	systemGroup.DELETE("/order", controller.DeleteAOrder)
 }
