@@ -22,16 +22,23 @@ type BaseBranch struct {
 	Name                string  `json:"name"`
 	Latitude            int32   `json:"latitude"`
 	Longitude           int32   `json:"longitude"`
+	Province string `json:"province"`
+	City     string `json:"city"`
+	Area     string `json:"area"`
+	Address  string `json:"address"`
 	ContactPerson       *string `json:"contact_person"` //联系人
 	ContactPhone        *uint64  `json:"contact_phone"`  // 联系人电话
 	WarriorManagerId    string   `json:"warrior_manager_id"`     // 管理这个店的战士
 	Range               *uint   `json:"range"`                  //服务范围
 	BaseCost            *uint64 `json:"base_cost"`              //这个网点的基础费用（单位：分）
 	ExtraRangeUnitPrice *uint64 `json:"extra_range_unit_price"` //超出范围的单价（单位：分）
+	Status int8 `json:"status"` // 网点状态
+	Remark        string `json:"remark" gorm:"default:''"`
 }
 type Branch struct {
 	BaseModel
 	BaseBranch
+	Created   int64 `json:"created" gorm:"autoUpdateTime:milli"`
 }
 
 // 优惠券
