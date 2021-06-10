@@ -3,6 +3,7 @@ package dao
 import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
+	"errors"
 )
 
 func CreateABranch(branch *models.Branch) (err error) {
@@ -30,9 +31,16 @@ func GetABranchById(id string) (branch *models.Branch, err error) {
 	}
 	return
 }
+//func UpdateABranch(branch *models.Branch)(err error)  {
+//	err=DB.Save(&branch).Error
+//	return
+//}
 func UpdateABranch(branch *models.Branch)(err error)  {
-	err=DB.Save(&branch).Error
-	return
+	result:=DB.Where("id=?",branch.ID).Updates(&branch)
+	if result.RowsAffected==0{
+		return errors.New("数据不存在")
+	}
+	return result.Error
 }
 func DeleteABranch(id string)(err error)  {
 	err = DB.Where("id=?",id).Delete(&models.Branch{}).Error

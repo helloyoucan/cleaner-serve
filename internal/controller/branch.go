@@ -45,35 +45,22 @@ func GetBranchByPages(c *gin.Context)  {
 	})
 }
 func UpdateABranch(c *gin.Context)  {
-	id := c.Query("id")
-	if id=="" {
-		util.RespJSON(c, gin.H{
-			"err": "id无效",
-		})
-		return
-	}
-	branch,err:=dao.GetABranchById(id)
+	var branch models.Branch
+	err:=c.BindJSON(&branch)
 	if err!=nil {
 		util.RespJSON(c,gin.H{
 			"err":err.Error(),
 		})
 		return
 	}
-	err=c.BindJSON(&branch)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
+	err = dao.UpdateABranch(&branch)
+	if err!=nil {
+		util.RespJSON(c,gin.H{
+			"err":err.Error(),
 		})
 		return
 	}
-	err=dao.UpdateABranch(branch)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
-		return
-	}
-	util.RespJSON(c,gin.H{"data":branch,})
+	util.RespJSON(c,gin.H{})
 }
 func DeleteABranch(c *gin.Context)  {
 	id := c.Query("id")
