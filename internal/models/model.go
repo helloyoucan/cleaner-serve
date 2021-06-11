@@ -20,8 +20,8 @@ type BaseModel struct {
 // 服务网点
 type BaseBranch struct {
 	Name                string  `json:"name"`
-	Latitude            int32   `json:"latitude"`
-	Longitude           int32   `json:"longitude"`
+	Longitude           float64   `json:"longitude" gorm:"double"` //经度
+	Latitude            float64   `json:"latitude" gorm:"double"` //纬度
 	Province string `json:"province"`
 	City     string `json:"city"`
 	Area     string `json:"area"`
@@ -29,11 +29,11 @@ type BaseBranch struct {
 	ContactPerson       *string `json:"contact_person"` //联系人
 	ContactPhone        *uint64  `json:"contact_phone"`  // 联系人电话
 	WarriorManagerId    *string   `json:"warrior_manager_id"`     // 管理这个店的战士
-	Range               *uint   `json:"range"`                  //服务范围
+	Range               *uint   `json:"range"`                  //服务范围（单位米）
 	BaseCost            *uint64 `json:"base_cost"`              //这个网点的基础费用（单位：分）
 	ExtraRangeUnitPrice *uint64 `json:"extra_range_unit_price"` //超出范围的单价（单位：分）
-	Status int8 `json:"status"` // 网点状态
-	Remark        string `json:"remark" gorm:"default:''"`
+	Status uint8 `json:"status" gorm:"default:0"` // 网点状态 0关闭，1营业中，2休息中
+	Remark        string `json:"remark" gorm:"default:''"` //备注
 }
 type Branch struct {
 	BaseModel
@@ -100,7 +100,7 @@ type BaseExtraService struct {
 	Description string  `json:"description"`
 }
 type ExtraService struct {
-	IsActive int8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
+	IsActive uint8 `json:"is_active" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
 	BaseExtraService
 }
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）

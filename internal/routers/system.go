@@ -18,7 +18,7 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.POST("/branch", controller.CreateABranch)
 	systemGroup.GET("/branch/pages", controller.GetBranchByPages)
 	systemGroup.PUT("/branch", controller.UpdateABranch)
-	systemGroup.DELETE("/branch", controller.DeleteABranch)
+	systemGroup.DELETE("/branch", controller.DeleteBranchByIds)
 	// 用户领取的优惠券
 	systemGroup.POST("/user/coupon", controller.CreateAUserCoupon)
 	systemGroup.GET("/user/coupon/:userId", controller.GetUserCouponByUseId)
