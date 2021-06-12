@@ -4,24 +4,38 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"errors"
-	"fmt"
 )
 
 func CreateABranch(branch *models.Branch) (err error) {
 	return DB.Create(&branch).Error
 }
-func GetBranchByPages(pages *models.Pages,query *models.BranchQuery) (branchLIst []*models.Branch, err error) {
-	var total int64
-	DB.Model(&models.Branch{}).Count(&total)
-	pages.CalcPages(total)
-	if err != nil {
-		return branchLIst, err
+
+
+func GetBranchByPages(query *models.BranchQuery) (branchList []*models.Branch, total int64,err error) {
+	var region  models.Region
+	region.Province = query.Province
+	region.City = query.City
+	region.Area = query.Area
+	db:=DB.Where(&region)
+	if query.Status !=""{
+		db.Where("status = ?",util.StrToUint(query.Status))
 	}
-	fmt.Println("------")
-	fmt.Println(query.Name)
-	err = DB.Where(&query).Scopes(util.Paginate(pages.Page,pages.PageSize)).Find(&branchLIst).Error
+	if query.CreatedStartTime!=0&&query.CreatedEndTime!=0{
+		db.Where("created BETWEEN ? AND ?", query.CreatedStartTime, query.CreatedEndTime)
+	}
+	if query.Name!=""{
+		db.Where("name LIKE ?","%"+query.Name+"%")
+	}
+	if query.ContactPerson!=""{
+		db.Where("contact_person LIKE ?","%"+query.ContactPerson+"%")
+	}
+	db.Model(&models.Branch{}).Count(&total)
 	if err != nil {
-		return nil, err
+		return branchList,0, err
+	}
+	err = db.Scopes(util.Paginate(query.Page,query.PageSize)).Find(&branchList).Error
+	if err != nil {
+		return nil,0, err
 	}
 
 	return

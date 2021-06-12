@@ -57,6 +57,13 @@ func Int64ToInt(num int64)(intNum int)  {
 	}
 	return
 }
+func StrToUint(str string) uint {
+	i, e := strconv.Atoi(str)
+	if e != nil {
+		return 0
+	}
+	return uint(i)
+}
 // 计算总页数
 func CalcTotalPage(total int,pageSize int) (totalPage int) {
 	totalPage=total/pageSize

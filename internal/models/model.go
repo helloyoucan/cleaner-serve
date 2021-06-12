@@ -158,18 +158,9 @@ func (m *BaseModel) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (pages *Pages) CalcPages(total int64)  {
-	if pages.Page == 0 {
-		pages.Page = 1
-	}
-	switch {
-	case pages.PageSize > 100:
-		pages.PageSize = 100
-		break
-	case pages.PageSize <= 0:
-		pages.PageSize = 10
-		break
-	}
+func (pages *Pages) CalcPagesData(page int,pageSize int,total int64)  {
+	pages.Page = page
+	pages.PageSize = pageSize
 	pages.Total= util.Int64ToInt(total)
 	pages.TotalPage = util.CalcTotalPage(pages.Total,pages.PageSize)
 }

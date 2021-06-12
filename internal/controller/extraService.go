@@ -5,7 +5,6 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func CreateAExtraService(c *gin.Context)  {
@@ -28,16 +27,23 @@ func CreateAExtraService(c *gin.Context)  {
 }
 
 func GetExtraServiceByPages(c *gin.Context)  {
-	var pages =new (models.Pages)
-	pages.Page,_ = strconv.Atoi(c.Query("page"))
-	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
-	extraServiceList,err:=dao.GetExtraServiceByPages(pages)
+	var query =new(models.ExtraServiceQuery)
+	err:=c.ShouldBind(&query)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	extraServiceList,total,err:=dao.GetExtraServiceByPages(query)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
+	var pages models.Pages
+	pages.CalcPagesData(query.Page,pages.PageSize,total)
 	util.RespJSON(c,gin.H{
 		"data": gin.H{
 			"list":extraServiceList,

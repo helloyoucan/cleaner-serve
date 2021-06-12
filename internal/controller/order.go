@@ -5,7 +5,6 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 //type APIOrder struct {
@@ -49,16 +48,23 @@ func CreateAOrder(c *gin.Context) {
 }
 
 func GetOrderByPages(c *gin.Context) {
-	var pages = new(models.Pages)
-	pages.Page, _ = strconv.Atoi(c.Query("page"))
-	pages.PageSize, _ = strconv.Atoi(c.Query("page_size"))
-	orderList, err := dao.GetOrderByPages(pages)
+	var query =new(models.OrderQuery)
+	err:=c.ShouldBind(&query)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	orderList, total, err := dao.GetOrderByPages(query)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
+	var pages models.Pages
+	pages.CalcPagesData(query.Page,query.PageSize,total)
 	util.RespJSON(c, gin.H{
 		"data": gin.H{
 			"list":  orderList,
@@ -67,17 +73,23 @@ func GetOrderByPages(c *gin.Context) {
 	})
 }
 func GetOrderByUserByPages(c *gin.Context) {
-	var pages = new(models.Pages)
-	pages.Page, _ = strconv.Atoi(c.Query("page"))
-	pages.PageSize, _ = strconv.Atoi(c.Query("page_size"))
-	userId, isOk := c.Params.Get("userId")
-	if !isOk || userId == "" {
+	var query =new(models.OrderQuery)
+	err:=c.ShouldBind(&query)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	if query.UserId == "" {
 		util.RespJSON(c, gin.H{
 			"err": "userId 无效",
 		})
 		return
 	}
-	orderList, err := dao.GetOrderByUserByPages(pages, userId)
+	orderList, total,err := dao.GetOrderByUserByPages(query)
+	var pages models.Pages
+	pages.CalcPagesData(query.Page,query.PageSize,total)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),

@@ -4,9 +4,7 @@ import (
 	"cleaner-serve/internal/dao"
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func CreateABranch(c *gin.Context)  {
@@ -28,28 +26,23 @@ func CreateABranch(c *gin.Context)  {
 	util.RespJSON(c,gin.H{})
 }
 func GetBranchByPages(c *gin.Context)  {
-	var pages =new (models.Pages)
-	pages.Page,_ = strconv.Atoi(c.Query("page"))
-	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
 	var query =new(models.BranchQuery)
 	err:=c.ShouldBind(&query)
-	// todo 处理status 0值问题
-	// todo 处理created时间范围问题
-	fmt.Println("------")
-	fmt.Println(query)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
-	branchList,err:=dao.GetBranchByPages(pages,query)
+	branchList,total,err:=dao.GetBranchByPages(query)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
+	var pages models.Pages
+	pages.CalcPagesData(query.Page,query.PageSize,total)
 	util.RespJSON(c,gin.H{
 		"data": gin.H{
 			"list":branchList,

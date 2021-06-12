@@ -5,7 +5,6 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func CreateAWarrior(c *gin.Context)  {
@@ -27,16 +26,23 @@ func CreateAWarrior(c *gin.Context)  {
 	util.RespJSON(c,gin.H{})
 }
 func GetWarriorByPages(c *gin.Context)  {
-	var pages =new (models.Pages)
-	pages.Page,_ = strconv.Atoi(c.Query("page"))
-	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
-	warriorList,err:=dao.GetWarriorByPages(pages)
+	var query =new(models.WarriorQuery)
+	err:=c.ShouldBind(&query)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
+	warriorList,total,err:=dao.GetWarriorByPages(query)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	var pages models.Pages
+	pages.CalcPagesData(query.Page,query.PageSize,total)
 	util.RespJSON(c,gin.H{
 		"data": gin.H{
 			"list":warriorList,

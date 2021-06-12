@@ -5,7 +5,6 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func CreateACoupon(c *gin.Context) {
@@ -27,16 +26,23 @@ func CreateACoupon(c *gin.Context) {
 	util.RespJSON(c, gin.H{})
 }
 func GetCouponByPages(c *gin.Context) {
-	var pages =new (models.Pages)
-	pages.Page,_ = strconv.Atoi(c.Query("page"))
-	pages.PageSize,_ = strconv.Atoi(c.Query("page_size"))
-	couponList, err := dao.GetCouponByPages(pages)
+	var query =new(models.CouponQuery)
+	err:=c.ShouldBind(&query)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	couponList, total, err := dao.GetCouponByPages(query)
 	if err != nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
 		})
 		return
 	}
+	var pages models.Pages
+	pages.CalcPagesData(query.Page,query.PageSize,total)
 	util.RespJSON(c, gin.H{
 		"data": gin.H{
 			"list":couponList,
