@@ -87,10 +87,10 @@ func Paginate(page int, pageSize int) func(db *gorm.DB) *gorm.DB {
 func QueryCreated(startTime uint, endTime uint) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if startTime != 0 {
-			db.Where("created > (?)", startTime)
+			db.Where("created >= (?)", startTime)
 		}
 		if endTime != 0 {
-			db.Where("created < (?)", endTime)
+			db.Where("created =< (?)", endTime)
 		}
 		return db
 	}

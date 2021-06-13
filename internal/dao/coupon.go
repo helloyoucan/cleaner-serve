@@ -19,10 +19,10 @@ func GetCouponByPages(query *models.CouponQuery) (couponList []*models.Coupon, t
 		db.Where("name LIKE ?", "%"+query.Name+"%")
 	}
 	if query.StartTime != 0 {
-		db.Where("start_time > (?)", query.StartTime)
+		db.Where("start_time >= (?)", query.StartTime)
 	}
 	if query.EndTime != 0 {
-		db.Where("end_time < (?)", query.EndTime)
+		db.Where("end_time =< (?)", query.EndTime)
 	}
 	db.Model(&models.Coupon{}).Count(&total)
 	err = db.Scopes(util.Paginate(query.Page, query.PageSize)).Find(&couponList).Error
