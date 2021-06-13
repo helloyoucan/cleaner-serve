@@ -48,6 +48,7 @@ type Coupon struct {
 	StartTime   int64  `json:"start_time"`
 	EndTime     int64  `json:"end_time"`
 	Description string `json:"description"`
+	Created   int64 `json:"created" gorm:"autoUpdateTime:milli"`
 }
 
 // 用户拥有的优惠券(用户关联，一个用户对多个优惠券)

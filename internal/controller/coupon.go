@@ -51,35 +51,22 @@ func GetCouponByPages(c *gin.Context) {
 	})
 }
 func UpdateACoupon(c *gin.Context) {
-	id := c.Query("id")
-	if id=="" {
-		util.RespJSON(c, gin.H{
-			"err": "id无效",
+	var coupon models.Coupon
+	err:=c.BindJSON(&coupon)
+	if err!=nil {
+		util.RespJSON(c,gin.H{
+			"err":err.Error(),
 		})
 		return
 	}
-	coupon, err := dao.GetACouponById(id)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
+	err = dao.UpdateACoupon(&coupon)
+	if err!=nil {
+		util.RespJSON(c,gin.H{
+			"err":err.Error(),
 		})
 		return
 	}
-	err=c.BindJSON(&coupon)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
-		return
-	}
-	err = dao.UpdateACoupon(coupon)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
-		return
-	}
-	util.RespJSON(c, gin.H{})
+	util.RespJSON(c,gin.H{})
 }
 func DeleteACoupon(c *gin.Context) {
 	id := c.Query("id")

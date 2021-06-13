@@ -24,6 +24,11 @@ type BranchQuery struct {
 }
 type CouponQuery struct {
 	BaseQuery
+	Name string `form:"name"`
+	StartTime   int64  `form:"start_time"`
+	EndTime     int64  `form:"end_time"`
+	CreatedStartTime uint `form:"created_start_time"`
+	CreatedEndTime uint `form:"created_end_time"`
 }
 
 type ExtraServiceQuery struct {

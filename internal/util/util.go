@@ -49,10 +49,10 @@ func UniqueId() string {
 }
 
 // int64转 int
-func Int64ToInt(num int64)(intNum int)  {
+func Int64ToInt(num int64) (intNum int) {
 	intNum, err := strconv.Atoi(strconv.FormatInt(num, 10))
-	if err!=nil{
-		fmt.Errorf("int64转 int=>"+err.Error())
+	if err != nil {
+		fmt.Errorf("int64转 int=>" + err.Error())
 		return 0
 	}
 	return
@@ -64,18 +64,34 @@ func StrToUint(str string) uint {
 	}
 	return uint(i)
 }
+
 // 计算总页数
-func CalcTotalPage(total int,pageSize int) (totalPage int) {
-	totalPage=total/pageSize
+func CalcTotalPage(total int, pageSize int) (totalPage int) {
+	totalPage = total / pageSize
 	if total%pageSize != 0 {
 		totalPage += 1
 	}
 	return
 }
+
 // 处理获取的分页参数
-func Paginate(page int,pageSize int) func(db *gorm.DB) *gorm.DB {
+func Paginate(page int, pageSize int) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		offset := (page - 1) * pageSize
 		return db.Offset(offset).Limit(pageSize)
+	}
+}
+
+// 处理查询创建时间范围
+
+func QueryCreated(startTime uint, endTime uint) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if startTime != 0 {
+			db.Where("created > (?)", startTime)
+		}
+		if endTime != 0 {
+			db.Where("created < (?)", endTime)
+		}
+		return db
 	}
 }

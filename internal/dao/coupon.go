@@ -3,6 +3,7 @@ package dao
 import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
+	"errors"
 )
 
 /**
@@ -11,12 +12,23 @@ import (
 func CreateACoupon(coupon *models.Coupon) (err error) {
 	return DB.Create(&coupon).Error
 }
-func GetCouponByPages(query *models.CouponQuery) (couponList []*models.Coupon, total int64,err error) {
-	err= DB.Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&couponList).Error
-	if err != nil {
-		return nil, 0,err
+
+func GetCouponByPages(query *models.CouponQuery) (couponList []*models.Coupon, total int64, err error) {
+	db := DB.Scopes(util.QueryCreated(query.CreatedStartTime, query.CreatedEndTime)).Order("created desc")
+	if query.Name != "" {
+		db.Where("name LIKE ?", "%"+query.Name+"%")
 	}
-	DB.Model(&models.Coupon{}).Count(&total)
+	if query.StartTime != 0 {
+		db.Where("start_time > (?)", query.StartTime)
+	}
+	if query.EndTime != 0 {
+		db.Where("end_time < (?)", query.EndTime)
+	}
+	db.Model(&models.Coupon{}).Count(&total)
+	err = db.Scopes(util.Paginate(query.Page, query.PageSize)).Find(&couponList).Error
+	if err != nil {
+		return nil, 0, err
+	}
 	return
 }
 
@@ -41,8 +53,11 @@ func GetACouponById(id string) (coupon *models.Coupon, err error) {
 	return
 }
 func UpdateACoupon(coupon *models.Coupon) (err error) {
-	err = DB.Save(&coupon).Error
-	return
+	result := DB.Where("id=?", coupon.ID).Select("*").Updates(&coupon)
+	if result.RowsAffected == 0 {
+		return errors.New("数据不存在")
+	}
+	return result.Error
 }
 func DeleteACoupon(id string) (err error) {
 	err = DB.Where("id=?", id).Delete(&models.Coupon{}).Error
