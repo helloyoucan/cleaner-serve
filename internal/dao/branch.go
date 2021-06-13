@@ -29,15 +29,11 @@ func GetBranchByPages(query *models.BranchQuery) (branchList []*models.Branch, t
 	if query.ContactPerson!=""{
 		db.Where("contact_person LIKE ?","%"+query.ContactPerson+"%")
 	}
-	db.Model(&models.Branch{}).Count(&total)
-	if err != nil {
-		return branchList,0, err
-	}
-	err = db.Scopes(util.Paginate(query.Page,query.PageSize)).Find(&branchList).Error
+	err = db.Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&branchList).Error
 	if err != nil {
 		return nil,0, err
 	}
-
+	db.Model(&models.Branch{}).Count(&total)
 	return
 }
 func GetABranchById(id string) (branch *models.Branch, err error) {

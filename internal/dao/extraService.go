@@ -16,14 +16,11 @@ func GetAllExtraService() (extraServiceLIst []*models.ExtraService, err error) {
 	return
 }
 func GetExtraServiceByPages(query *models.ExtraServiceQuery) (extraServiceList []*models.ExtraService, total int64, err error) {
-	DB.Model(&models.ExtraService{}).Count(&total)
-	if err != nil {
-		return extraServiceList, 0,err
-	}
-	err = DB.Scopes(util.Paginate(query.Page,query.PageSize)).Find(&extraServiceList).Error
+	err = DB.Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&extraServiceList).Error
 	if err != nil {
 		return nil,0, err
 	}
+	DB.Model(&models.ExtraService{}).Count(&total)
 	return
 }
 func GetAllActiveExtraService() (extraServiceList []*models.ExtraService, err error) {

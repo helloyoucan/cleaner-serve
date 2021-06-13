@@ -9,7 +9,7 @@ func CreateAOrder(order *models.Order) (err error) {
 	return DB.Create(&order).Error
 }
 func GetOrderByPages(query *models.OrderQuery) (orderList []*models.Order,total int64, err error) {
-	err = DB.Preload("ExtraServices").Preload("OrderCoupons").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&orderList).Error
+	err = DB.Preload("ExtraServices").Preload("OrderCoupons").Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&orderList).Error
 	if err != nil {
 		return nil, 0,err
 	}
@@ -17,7 +17,7 @@ func GetOrderByPages(query *models.OrderQuery) (orderList []*models.Order,total 
 	return
 }
 func GetOrderByUserByPages(query *models.OrderQuery) (orderList []*models.Order, total int64, err error) {
-	err = DB.Where("user_id=?",query.UserId).Scopes(util.Paginate(query.Page,query.PageSize)).Find(&orderList).Error
+	err = DB.Where("user_id=?",query.UserId).Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&orderList).Error
 	if err != nil {
 		return nil,0, err
 	}

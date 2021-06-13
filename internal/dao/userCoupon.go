@@ -9,7 +9,7 @@ func CreateAUserCoupon(userCoupon *models.UserCoupon) (err error) {
 
 // 通过用户ID获取多个优惠券
 func GetUserCouponByUseId(userId string) (userCouponList []*models.UserCoupon, err error) {
-	err = DB.Where("user_id=?",userId).Find(&userCouponList).Error
+	err = DB.Where("user_id=?",userId).Order("created desc").Find(&userCouponList).Error
 	if err != nil {
 		return nil, err
 	}

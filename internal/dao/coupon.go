@@ -12,16 +12,11 @@ func CreateACoupon(coupon *models.Coupon) (err error) {
 	return DB.Create(&coupon).Error
 }
 func GetCouponByPages(query *models.CouponQuery) (couponList []*models.Coupon, total int64,err error) {
-	DB.Model(&models.Coupon{}).Count(&total)
-	if err != nil {
-		return couponList,0 ,err
-	}
-	err= DB.Scopes(util.Paginate(query.Page,query.PageSize)).Find(&couponList).Error
+	err= DB.Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&couponList).Error
 	if err != nil {
 		return nil, 0,err
 	}
-
-
+	DB.Model(&models.Coupon{}).Count(&total)
 	return
 }
 

@@ -16,7 +16,7 @@ func GetAllWarrior() (warriorList []*models.Warrior, err error) {
 	return
 }
 func GetWarriorByPages(query *models.WarriorQuery) (warrior []*models.Warrior, total int64,err error) {
-	err = DB.Scopes(util.Paginate(query.Page,query.PageSize)).Find(&warrior).Error
+	err = DB.Order("created desc").Scopes(util.Paginate(query.Page,query.PageSize)).Find(&warrior).Error
 	if err != nil {
 		return nil,0, err
 	}
