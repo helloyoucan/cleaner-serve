@@ -43,7 +43,7 @@ func GetExtraServiceByPages(c *gin.Context)  {
 		return
 	}
 	var pages models.Pages
-	pages.CalcPagesData(query.Page,pages.PageSize,total)
+	pages.CalcPagesData(query.Page,query.PageSize,total)
 	util.RespJSON(c,gin.H{
 		"data": gin.H{
 			"list":extraServiceList,

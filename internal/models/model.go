@@ -2,6 +2,7 @@ package models
 
 import (
 	"cleaner-serve/internal/util"
+	"fmt"
 	"gorm.io/gorm"
 	"gorm.io/plugin/soft_delete"
 )
@@ -168,6 +169,10 @@ func (m *BaseModel) BeforeCreate(tx *gorm.DB) (err error) {
 func (pages *Pages) CalcPagesData(page int, pageSize int, total int64) {
 	pages.Page = page
 	pages.PageSize = pageSize
+	fmt.Println("-------")
+	fmt.Println(pages.Page)
+	fmt.Println(pages.PageSize)
 	pages.Total = util.Int64ToInt(total)
+	fmt.Println(pages.Total)
 	pages.TotalPage = util.CalcTotalPage(pages.Total, pages.PageSize)
 }
