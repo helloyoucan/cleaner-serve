@@ -7,104 +7,73 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateAExtraService(c *gin.Context)  {
+func CreateAExtraService(c *gin.Context) {
 	var extraService models.ExtraService
-	err:=c.BindJSON(&extraService)
-	if err!=nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
-		return
-	}
-	err=dao.CreateAExtraService(&extraService)
+	err := c.BindJSON(&extraService)
 	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
+		util.RespJSON(c, gin.H{"err": err.Error(),})
 		return
 	}
-	util.RespJSON(c,gin.H{})
+	err = dao.CreateAExtraService(&extraService)
+	if err != nil {
+		util.RespJSON(c, gin.H{"err": err.Error(),})
+		return
+	}
+	util.RespJSON(c, gin.H{})
 }
 
-func GetExtraServiceByPages(c *gin.Context)  {
-	var query =new(models.ExtraServiceQuery)
-	err:=c.ShouldBind(&query)
-	if err!=nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
+func GetExtraServiceByPages(c *gin.Context) {
+	var query = new(models.ExtraServiceQuery)
+	err := c.ShouldBind(&query)
+	if err != nil {
+		util.RespJSON(c, gin.H{"err": err.Error(),})
 		return
 	}
-	extraServiceList,total,err:=dao.GetExtraServiceByPages(query)
+	extraServiceList, total, err := dao.GetExtraServiceByPages(query)
 	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
+		util.RespJSON(c, gin.H{"err": err.Error(),})
 		return
 	}
 	var pages models.Pages
-	pages.CalcPagesData(query.Page,query.PageSize,total)
-	util.RespJSON(c,gin.H{
+	pages.CalcPagesData(query.Page, query.PageSize, total)
+	util.RespJSON(c, gin.H{
 		"data": gin.H{
-			"list":extraServiceList,
-			"pages":pages,
+			"list":  extraServiceList,
+			"pages": pages,
 		},
 	})
 }
-func GetAllActiveExtraService(c *gin.Context)  {
-	extraServiceList,err:=dao.GetAllActiveExtraService()
-	if err!=nil {
-		util.RespJSON(c,gin.H{
-			"err":err.Error(),
-		})
+func GetAllActiveExtraService(c *gin.Context) {
+	extraServiceList, err := dao.GetAllActiveExtraService()
+	if err != nil {
+		util.RespJSON(c, gin.H{"err": err.Error(),})
 		return
 	}
-	util.RespJSON(c,gin.H{"data":extraServiceList,})
+	util.RespJSON(c, gin.H{"data": extraServiceList,})
 }
-func UpdateAExtraService(c *gin.Context)  {
-	id := c.Query("id")
-	if id=="" {
-		util.RespJSON(c, gin.H{
-			"err": "id无效",
-		})
-		return
-	}
-	extraService,err:=dao.GetAExtraServiceById(id)
-	if err!=nil {
-		util.RespJSON(c,gin.H{
-			"err":err.Error(),
-		})
-		return
-	}
-	err=c.BindJSON(&extraService)
+func UpdateAExtraService(c *gin.Context) {
+	var extraService models.ExtraService
+	err := c.BindJSON(&extraService)
 	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
+		util.RespJSON(c, gin.H{"err": err.Error()})
 		return
 	}
-	err=dao.UpdateAExtraService(extraService)
+	err = dao.UpdateAExtraService(&extraService)
 	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
+		util.RespJSON(c, gin.H{"err": err.Error()})
 		return
 	}
-	util.RespJSON(c,gin.H{"data":extraService,})
+	util.RespJSON(c, gin.H{})
 }
 func DeleteAExtraService(c *gin.Context) {
 	id := c.Query("id")
 	if id == "" {
-		util.RespJSON(c, gin.H{
-			"err": "id无效",
-		})
+		util.RespJSON(c, gin.H{"err": "id无效",})
 		return
 	}
 	err := dao.DeleteAExtraService(id)
 	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
+		util.RespJSON(c, gin.H{"err": err.Error(),})
 		return
 	}
 	util.RespJSON(c, gin.H{})

@@ -33,6 +33,11 @@ type CouponQuery struct {
 
 type ExtraServiceQuery struct {
 	BaseQuery
+	Name string `form:"name"`
+	Discount    uint8 `form:"discount"`
+	Status string `form:"status"`
+	CreatedStartTime uint `form:"created_start_time"`
+	CreatedEndTime uint `form:"created_end_time"`
 }
 
 type OrderQuery struct {

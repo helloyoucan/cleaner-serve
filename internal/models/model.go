@@ -100,7 +100,7 @@ type BaseExtraService struct {
 	BaseModel
 	Name        string  `json:"name"`
 	UnitPrice   int     `json:"unit_price"`
-	Discount    float32 `json:"discount"` //这个服务的折扣
+	Discount    uint8 `json:"discount"` //这个服务的折扣
 	Description string  `json:"description"`
 }
 type ExtraService struct {
@@ -169,9 +169,6 @@ func (m *BaseModel) BeforeCreate(tx *gorm.DB) (err error) {
 func (pages *Pages) CalcPagesData(page int, pageSize int, total int64) {
 	pages.Page = page
 	pages.PageSize = pageSize
-	fmt.Println("-------")
-	fmt.Println(pages.Page)
-	fmt.Println(pages.PageSize)
 	pages.Total = util.Int64ToInt(total)
 	fmt.Println(pages.Total)
 	pages.TotalPage = util.CalcTotalPage(pages.Total, pages.PageSize)
