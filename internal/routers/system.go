@@ -18,6 +18,7 @@ func InitAdminRouter(r *gin.Engine) {
 	//服务网店
 	systemGroup.POST("/branch", controller.CreateABranch)
 	systemGroup.GET("/branch/pages", controller.GetBranchByPages)
+	systemGroup.GET("/branch", controller.GetAllBranch)
 	systemGroup.PUT("/branch", controller.UpdateABranch)
 	systemGroup.DELETE("/branch", controller.DeleteBranchByIds)
 	// 用户领取的优惠券

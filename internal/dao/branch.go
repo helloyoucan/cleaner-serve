@@ -32,6 +32,13 @@ func GetBranchByPages(query *models.BranchQuery) (branchList []*models.Branch, t
 	}
 	return
 }
+func GetAllBranch() (branchList []*models.Branch, err error) {
+	err = DB.Order("created desc").Find(&branchList).Error
+	if err != nil {
+		return nil, err
+	}
+	return
+}
 func GetABranchById(id string) (branch *models.Branch, err error) {
 	branch = new(models.Branch)
 	err = DB.Where("id=?", id).Find(&branch).Error

@@ -74,10 +74,11 @@ type Warrior struct {
 	Birthday       *int64   `json:"birthday"`
 	Sex         uint8   `json:"sex" gorm:"default:1"`//0女，1男
 	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime:milli"`
-	BelongBranchId *uint   `json:"belong_branch_id"`
+	BelongBranchId *uint   `json:"belong_branch_id"gorm:"default:''"`
 	Status         uint8   `json:"status" gorm:"default:0"` //账号状态
 	IDCard         string    `json:"id_card"`
-	IDCardImageListStr string `json:"id_card_image_list_str" gorm:"default:'[]'"`
+	IDCardImageFront string `json:"id_card_image_front" gorm:"default:''"`
+	IDCardImageBehind string `json:"id_card_image_behind" gorm:"default:''"`
 	// 户籍所在地
 	DomicileProvince       string `json:"domicile_province"`
 	DomicileCity           string `json:"domicile_city"`

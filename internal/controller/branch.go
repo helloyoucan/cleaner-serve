@@ -50,6 +50,18 @@ func GetBranchByPages(c *gin.Context)  {
 		},
 	})
 }
+func GetAllBranch(c *gin.Context)  {
+	branchList,err:=dao.GetAllBranch()
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	util.RespJSON(c,gin.H{
+		"data": branchList,
+	})
+}
 func UpdateABranch(c *gin.Context)  {
 	var branch models.Branch
 	err:=c.BindJSON(&branch)
