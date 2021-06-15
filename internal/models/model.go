@@ -70,20 +70,35 @@ type UserCoupon struct {
 type Warrior struct {
 	BaseModel
 	Name           string  `json:"name"`
-	IDCard         uint    `json:"id_card"`
 	Phone          uint64  `json:"phone"`
-	Score          float32 `json:"score"` //评分
-	Age            uint8   `json:"age"`
-	Gender         uint8   `json:"gender"`
-	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime"`
+	Birthday       *int64   `json:"birthday"`
+	Sex         uint8   `json:"sex" gorm:"default:1"`//0女，1男
+	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime:milli"`
 	BelongBranchId *uint   `json:"belong_branch_id"`
+	Status         uint8   `json:"status" gorm:"default:0"` //账号状态
+	IDCard         string    `json:"id_card"`
+	IDCardImageListStr string `json:"id_card_image_list_str" gorm:"default:'[]'"`
+	// 户籍所在地
+	DomicileProvince       string `json:"domicile_province"`
+	DomicileCity           string `json:"domicile_city"`
+	DomicileArea           string `json:"domicile_area"`
+	// 居住地址
 	Province       string  `json:"province"`
 	City           string  `json:"city"`
 	Area           string  `json:"area"`
 	Address        string  `json:"address"`
-	Status         uint8   `json:"status" gorm:"default:0"` //账号状态
+	Remark string `json:"remark"`
+	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
 }
-
+// 战士评分表
+type WarriorScore struct {
+	BaseModel
+	WarriorId string `json:"warrior_id"`
+	Score uint8 `json:"score"`
+	Comment string `json:"comment"`
+	Anonymous uint8 `json:"anonymous" gorm:"default:0"` //是否匿名，0不匿名，1匿名
+	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
+}
 // 订单使用的拥有的优惠券(订单表关联，一个订单对应多张优惠券)
 type OrderCoupon struct {
 	BaseModel

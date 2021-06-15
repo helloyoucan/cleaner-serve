@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cleaner-serve/configs"
 	"cleaner-serve/internal/dao"
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/routers"
@@ -23,6 +24,6 @@ func main() {
 	dao.DB.AutoMigrate(&models.Warrior{})
 	dao.DB.AutoMigrate(&models.Branch{})
 	r := routers.SetupRouter()
-	r.Run(":8080")
+	r.Run(":"+configs.Port)
 	fmt.Println("serve run 8080")
 }

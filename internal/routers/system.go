@@ -8,7 +8,8 @@ import (
 
 func InitAdminRouter(r *gin.Engine) {
 	systemGroup := r.Group("api/system")
-	systemGroup.GET("/login", controller.AdminLogin)
+	systemGroup.POST("/upload", controller.Upload)
+	systemGroup.POST("/login", controller.AdminLogin)
 	// 优惠券
 	systemGroup.POST("/coupon", controller.CreateACoupon)
 	systemGroup.GET("/coupon/pages", controller.GetCouponByPages)
