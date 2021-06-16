@@ -52,35 +52,22 @@ func GetWarriorByPages(c *gin.Context)  {
 }
 
 func UpdateAWarrior(c *gin.Context)  {
-	id := c.Query("id")
-	if id=="" {
-		util.RespJSON(c, gin.H{
-			"err": "id无效",
-		})
-		return
-	}
-	warrior,err:=dao.GetAWarriorById(id)
+	var warrior models.Warrior
+	err:=c.BindJSON(&warrior)
 	if err!=nil {
 		util.RespJSON(c,gin.H{
 			"err":err.Error(),
 		})
 		return
 	}
-	err=c.BindJSON(&warrior)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
+	err = dao.UpdateAWarrior(&warrior)
+	if err!=nil {
+		util.RespJSON(c,gin.H{
+			"err":err.Error(),
 		})
 		return
 	}
-	err=dao.UpdateAWarrior(warrior)
-	if err != nil {
-		util.RespJSON(c, gin.H{
-			"err": err.Error(),
-		})
-		return
-	}
-	util.RespJSON(c,gin.H{"data":warrior,})
+	util.RespJSON(c,gin.H{})
 }
 func DeleteAWarrior(c *gin.Context) {
 	id := c.Query("id")

@@ -47,6 +47,9 @@ type OrderQuery struct {
 
 type WarriorQuery struct {
 	BaseQuery
+	Name string `form:"name"`
+	Status string `form:"status"`
+	BelongBranchId string   `form:"belong_branch_id"`
 }
 
 
