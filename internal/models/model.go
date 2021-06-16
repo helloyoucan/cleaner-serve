@@ -48,6 +48,13 @@ type Branch struct {
 type Coupon struct {
 	BaseModel
 	Name        string `json:"name"`
+	Amount uint `json:"amount"`//可领取数量
+	Type uint8 `json:"type"` // 优惠类型 0:指定金额，1:折扣
+	TypeValue uint `json:"type_value"` // 优惠类型对应的值
+	Threshold uint `json:"threshold"` // 使用门槛 0:无，1:指定金额，2:用户首单
+	ThresholdValue *uint `json:"threshold_value"`//有使用门槛时对应的值
+	ExpiryType uint `json:"expiry_type"`//有效期类型 0:固定日期,1:领取当日开始N天内有效
+	ExpiryTypeValue uint `json:"expiry_type_value"`//当ExpiryType=1时，绑定的值
 	StartTime   int64  `json:"start_time"`
 	EndTime     int64  `json:"end_time"`
 	Description string `json:"description"`
@@ -137,13 +144,15 @@ type OrderExtraService struct {
 // 订单
 type Order struct {
 	BaseModel
-	OrderNum string `json:"order_num"` // 订单编号
-	UserID             string  `json:"user_id"`
-	Status             uint8   `json:"status" gorm:"default:0"`        //订单状态
-	TotalPrice         uint `json:"total_price"`                    //总费用
-	RefundStatus       uint8   `json:"refund_status" gorm:"default:0"` //退款状态
-	RefundSArrivalTime *int64  `json:"refund_s_arrival_time"`          //退款到账时间
-	Created            int64   `json:"created" gorm:"autoUpdateTime:milli"`
+	OrderNum           string `json:"order_num"` // 订单编号
+	UserID             string `json:"user_id"`
+	Status             uint8  `json:"status" gorm:"default:0"`        //订单状态
+	TotalAmount        uint   `json:"total_amount"`                   //总金额
+	PaidInAmount       uint   `json:"paid_in_amount"`                 // 实收金额
+	DiscountAmount     uint   `json:"discount_amount"`                //优惠金额
+	RefundStatus       uint8  `json:"refund_status" gorm:"default:0"` //退款状态
+	RefundSArrivalTime *int64 `json:"refund_s_arrival_time"`          //退款到账时间
+	Created            int64  `json:"created" gorm:"autoUpdateTime:milli"`
 	// 接单战士
 	Warrior *struct {
 		ID             *string `json:"id"`
