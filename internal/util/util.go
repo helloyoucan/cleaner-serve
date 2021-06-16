@@ -10,8 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"io"
+	mathRand "math/rand"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // 统一返回请求的数据格式
@@ -83,7 +85,6 @@ func Paginate(page int, pageSize int) func(db *gorm.DB) *gorm.DB {
 }
 
 // 处理查询创建时间范围
-
 func QueryCreated(startTime uint, endTime uint) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if startTime != 0 {
@@ -94,4 +95,21 @@ func QueryCreated(startTime uint, endTime uint) func(db *gorm.DB) *gorm.DB {
 		}
 		return db
 	}
+}
+
+func getTimeTick64() int64 {
+	return time.Now().UnixNano() / 1e6
+}
+
+func getFormatTime(time time.Time) string {
+	return time.Format("20060102")
+}
+
+/**
+生成订单编号:日期20191025时间戳1571987125435+3位随机数
+ */
+func GenerateOrderNum()string {
+	date := getFormatTime(time.Now())
+	r := mathRand.Intn(100)
+	return date+ strconv.FormatInt(getTimeTick64(),10)+ strconv.Itoa(r)
 }

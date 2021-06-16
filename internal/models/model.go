@@ -69,37 +69,39 @@ type UserCoupon struct {
 // 接单服务的战士信息
 type Warrior struct {
 	BaseModel
-	Name           string  `json:"name"`
-	Phone          uint64  `json:"phone"`
-	Birthday       uint   `json:"birthday"`
-	Sex         uint8   `json:"sex" gorm:"default:1"`//0女，1男
-	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime:milli"`
-	BelongBranchId *string   `json:"belong_branch_id"gorm:"default:''"`
-	Status         uint8   `json:"status" gorm:"default:0"` //账号状态
-	IDCard         string    `json:"id_card"`
-	IDCardImageFront string `json:"id_card_image_front" gorm:"default:''"`
-	IDCardImageBehind string `json:"id_card_image_behind" gorm:"default:''"`
+	Name              string  `json:"name"`
+	Phone             uint64  `json:"phone"`
+	Birthday          uint    `json:"birthday"`
+	Sex               uint8   `json:"sex" gorm:"default:1"` //0女，1男
+	JoinTime          int64   `json:"join_time" gorm:"autoCreateTime:milli"`
+	BelongBranchId    *string `json:"belong_branch_id"gorm:"default:''"`
+	Status            uint8   `json:"status" gorm:"default:0"` //账号状态
+	IDCard            string  `json:"id_card"`
+	IDCardImageFront  string  `json:"id_card_image_front" gorm:"default:''"`
+	IDCardImageBehind string  `json:"id_card_image_behind" gorm:"default:''"`
 	// 户籍所在地
-	DomicileProvince       string `json:"domicile_province" gorm:"default:''"`
-	DomicileCity           string `json:"domicile_city" gorm:"default:''"`
-	DomicileArea           string `json:"domicile_area" gorm:"default:''"`
+	DomicileProvince string `json:"domicile_province" gorm:"default:''"`
+	DomicileCity     string `json:"domicile_city" gorm:"default:''"`
+	DomicileArea     string `json:"domicile_area" gorm:"default:''"`
 	// 居住地址
-	Province       string  `json:"province" gorm:"default:''"`
-	City           string  `json:"city" gorm:"default:''"`
-	Area           string  `json:"area" gorm:"default:''"`
-	Address        string  `json:"address" gorm:"default:''"`
-	Remark string `json:"remark"`
-	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
+	Province string `json:"province" gorm:"default:''"`
+	City     string `json:"city" gorm:"default:''"`
+	Area     string `json:"area" gorm:"default:''"`
+	Address  string `json:"address" gorm:"default:''"`
+	Remark   string `json:"remark"`
+	Created  int64  `json:"created" gorm:"autoUpdateTime:milli"`
 }
+
 // 战士评分表
 type WarriorScore struct {
 	BaseModel
 	WarriorId string `json:"warrior_id"`
-	Score uint8 `json:"score"`
-	Comment string `json:"comment"`
-	Anonymous uint8 `json:"anonymous" gorm:"default:0"` //是否匿名，0不匿名，1匿名
-	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
+	Score     uint8  `json:"score"`
+	Comment   string `json:"comment"`
+	Anonymous uint8  `json:"anonymous" gorm:"default:0"` //是否匿名，0不匿名，1匿名
+	Created   int64  `json:"created" gorm:"autoUpdateTime:milli"`
 }
+
 // 订单使用的拥有的优惠券(订单表关联，一个订单对应多张优惠券)
 type OrderCoupon struct {
 	BaseModel
@@ -114,15 +116,15 @@ type OrderCoupon struct {
 // 附加服务
 type BaseExtraService struct {
 	BaseModel
-	Name        string  `json:"name"`
-	UnitPrice   int     `json:"unit_price"`
-	Discount    uint8 `json:"discount"` //这个服务的折扣
-	Description string  `json:"description"`
+	Name        string `json:"name"`
+	UnitPrice   int    `json:"unit_price"`
+	Discount    uint8  `json:"discount"` //这个服务的折扣
+	Description string `json:"description"`
 }
 type ExtraService struct {
 	BaseExtraService
-	Status uint8 `json:"status" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
-	Created     int64  `json:"created" gorm:"autoUpdateTime:milli"`
+	Status  uint8 `json:"status" gorm:"default:0"` // 是否在可用状态,1为可用，0为不可用
+	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
 }
 
 // 订单使用的附加服务（订单关联,一订单对应多个附加服务）
@@ -135,11 +137,13 @@ type OrderExtraService struct {
 // 订单
 type Order struct {
 	BaseModel
+	OrderNum string `json:"order_num"` // 订单编号
 	UserID             string  `json:"user_id"`
 	Status             uint8   `json:"status" gorm:"default:0"`        //订单状态
-	TotalPrice         float64 `json:"total_price"`                    //总费用
+	TotalPrice         uint `json:"total_price"`                    //总费用
 	RefundStatus       uint8   `json:"refund_status" gorm:"default:0"` //退款状态
 	RefundSArrivalTime *int64  `json:"refund_s_arrival_time"`          //退款到账时间
+	Created            int64   `json:"created" gorm:"autoUpdateTime:milli"`
 	// 接单战士
 	Warrior *struct {
 		ID             *string `json:"id"`
@@ -179,6 +183,11 @@ type Order struct {
 
 func (m *BaseModel) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = util.UniqueId()
+	return
+}
+func (m *Order) BeforeCreate(tx *gorm.DB) (err error) {
+	m.ID = util.UniqueId()
+	m.OrderNum = util.GenerateOrderNum()
 	return
 }
 
