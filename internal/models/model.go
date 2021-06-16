@@ -71,10 +71,10 @@ type Warrior struct {
 	BaseModel
 	Name           string  `json:"name"`
 	Phone          uint64  `json:"phone"`
-	Birthday       *int64   `json:"birthday"`
+	Birthday       uint   `json:"birthday"`
 	Sex         uint8   `json:"sex" gorm:"default:1"`//0女，1男
 	JoinTime       int64   `json:"join_time" gorm:"autoCreateTime:milli"`
-	BelongBranchId *uint   `json:"belong_branch_id"gorm:"default:''"`
+	BelongBranchId *string   `json:"belong_branch_id"gorm:"default:''"`
 	Status         uint8   `json:"status" gorm:"default:0"` //账号状态
 	IDCard         string    `json:"id_card"`
 	IDCardImageFront string `json:"id_card_image_front" gorm:"default:''"`
