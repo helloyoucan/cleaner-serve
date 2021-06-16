@@ -24,6 +24,9 @@ func main() {
 	dao.DB.AutoMigrate(&models.Warrior{})
 	dao.DB.AutoMigrate(&models.Branch{})
 	r := routers.SetupRouter()
+	r.Static("/upload", "./upload")
+	//r.StaticFS("/more_static", http.Dir("my_file_system"))
+	//r.StaticFile("/favicon.ico", "./resources/favicon.ico")
 	r.Run(":"+configs.Port)
 	fmt.Println("serve run 8080")
 }

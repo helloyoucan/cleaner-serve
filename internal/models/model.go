@@ -80,14 +80,14 @@ type Warrior struct {
 	IDCardImageFront string `json:"id_card_image_front" gorm:"default:''"`
 	IDCardImageBehind string `json:"id_card_image_behind" gorm:"default:''"`
 	// 户籍所在地
-	DomicileProvince       string `json:"domicile_province"`
-	DomicileCity           string `json:"domicile_city"`
-	DomicileArea           string `json:"domicile_area"`
+	DomicileProvince       string `json:"domicile_province" gorm:"default:''"`
+	DomicileCity           string `json:"domicile_city" gorm:"default:''"`
+	DomicileArea           string `json:"domicile_area" gorm:"default:''"`
 	// 居住地址
-	Province       string  `json:"province"`
-	City           string  `json:"city"`
-	Area           string  `json:"area"`
-	Address        string  `json:"address"`
+	Province       string  `json:"province" gorm:"default:''"`
+	City           string  `json:"city" gorm:"default:''"`
+	Area           string  `json:"area" gorm:"default:''"`
+	Address        string  `json:"address" gorm:"default:''"`
 	Remark string `json:"remark"`
 	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
 }
