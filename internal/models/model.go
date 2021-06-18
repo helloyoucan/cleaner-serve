@@ -48,10 +48,11 @@ type Branch struct {
 type Coupon struct {
 	BaseModel
 	Name        string `json:"name"`
-	Amount uint `json:"amount"`//可领取数量
+	TotalAmount uint `json:"total_amount"`//可领取的总数量
+	Amount uint `json:"amount"`//还可领取数量
 	Type uint8 `json:"type"` // 优惠类型 0:指定金额，1:折扣
 	TypeValue uint `json:"type_value"` // 优惠类型对应的值
-	Threshold uint `json:"threshold"` // 使用门槛 0:无，1:指定金额，2:用户首单
+	ThresholdType uint `json:"threshold_type"` // 使用门槛 0:无，1:指定金额，2:用户首单
 	ThresholdValue *uint `json:"threshold_value"`//有使用门槛时对应的值
 	ExpiryType uint `json:"expiry_type"`//有效期类型 0:固定日期,1:领取当日开始N天内有效
 	ExpiryTypeValue uint `json:"expiry_type_value"`//当ExpiryType=1时，绑定的值
