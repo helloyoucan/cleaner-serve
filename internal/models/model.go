@@ -43,35 +43,34 @@ type Branch struct {
 	BaseBranch
 	Created int64 `json:"created" gorm:"autoUpdateTime:milli"`
 }
-
-// 优惠券
-type Coupon struct {
-	BaseModel
+type BaseCoupon struct {
 	Name        string `json:"name"`
-	TotalAmount uint `json:"total_amount"`//可领取的总数量
-	Amount uint `json:"amount"`//还可领取数量
 	Type uint8 `json:"type"` // 优惠类型 0:指定金额，1:折扣
 	TypeValue uint `json:"type_value"` // 优惠类型对应的值
 	ThresholdType uint `json:"threshold_type"` // 使用门槛 0:无，1:指定金额，2:用户首单
 	ThresholdValue *uint `json:"threshold_value"`//有使用门槛时对应的值
 	ExpiryType uint `json:"expiry_type"`//有效期类型 0:固定日期,1:领取当日开始N天内有效
-	ExpiryTypeValue uint `json:"expiry_type_value"`//当ExpiryType=1时，绑定的值
-	StartTime   int64  `json:"start_time"`
-	EndTime     int64  `json:"end_time"`
+	ExpiryTypeValue *uint `json:"expiry_type_value"`//当ExpiryType=1时，绑定的值
+	StartTime   *int64  `json:"start_time"`
+	EndTime     *int64  `json:"end_time"`
 	Description string `json:"description"`
+}
+// 优惠券
+type Coupon struct {
+	BaseModel
+	BaseCoupon
+	TotalAmount uint `json:"total_amount"`//可领取的总数量
+	IssuedAmount uint `json:"issued_amount"`//还可领取数量
 	Created     int64  `json:"created" gorm:"autoUpdateTime:milli"`
 }
 
 // 用户拥有的优惠券(用户关联，一个用户对多个优惠券)
 type UserCoupon struct {
 	BaseModel
+	BaseCoupon
 	CouponId    string `json:"coupon_id"`
 	UserId      string `json:"user_id"`
-	Status      uint8  `json:"status" gorm:"default:0"`
-	Name        string `json:"name"`
-	StartTime   int64  `json:"start_time"`
-	EndTime     int64  `json:"end_time"`
-	Description string `json:"description"`
+	Status      uint8  `json:"status" gorm:"default:0"` // 0未使用，1已使用
 }
 
 // 接单服务的战士信息
@@ -126,7 +125,7 @@ type BaseExtraService struct {
 	BaseModel
 	Name        string `json:"name"`
 	UnitPrice   int    `json:"unit_price"`
-	Discount    uint8  `json:"discount"` //这个服务的折扣
+	Discount    uint8  `json:"discount"` //这个服务的折扣(1-100)
 	Description string `json:"description"`
 }
 type ExtraService struct {
