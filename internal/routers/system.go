@@ -10,6 +10,7 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup := r.Group("api/system")
 	systemGroup.POST("/upload", controller.Upload)
 	systemGroup.POST("/login", controller.AdminLogin)
+	systemGroup.GET("/location/ip", controller.GetLocation)
 	// 优惠券
 	systemGroup.POST("/coupon", controller.CreateACoupon)
 	systemGroup.GET("/coupon/pages", controller.GetCouponByPages)
