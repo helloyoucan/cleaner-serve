@@ -22,6 +22,9 @@ func GetBranchByPages(query *models.BranchQuery) (branchList []*models.Branch, t
 	if query.Name != "" {
 		db.Where("name LIKE ?", "%"+query.Name+"%")
 	}
+	if query.Address != "" {
+		db.Where("address LIKE ?", "%"+query.Address+"%")
+	}
 	if query.ContactPerson != "" {
 		db.Where("contact_person LIKE ?", "%"+query.ContactPerson+"%")
 	}

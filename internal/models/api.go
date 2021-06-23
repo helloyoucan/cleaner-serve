@@ -16,6 +16,7 @@ type Region struct {
 type BranchQuery struct {
 	Region
 	Name string `form:"name"`
+	Address  string  `form:"address"`
 	ContactPerson  string `form:"contact_person"` //联系人
 	Status string `form:"status"` // 网点状态 0关闭，1营业中，2休息中
 	CreatedStartTime uint `form:"created_start_time"`

@@ -16,7 +16,7 @@ func InitAdminRouter(r *gin.Engine) {
 	systemGroup.GET("/coupon/pages", controller.GetCouponByPages)
 	systemGroup.PUT("/coupon", controller.UpdateACoupon)
 	systemGroup.DELETE("/coupon", controller.DeleteACoupon)
-	//服务网店
+	//服务网点
 	systemGroup.POST("/branch", controller.CreateABranch)
 	systemGroup.GET("/branch/pages", controller.GetBranchByPages)
 	systemGroup.GET("/branch", controller.GetAllBranch)
