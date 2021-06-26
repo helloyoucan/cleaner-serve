@@ -23,8 +23,8 @@ type BaseModel struct {
 // 服务网点
 type BaseBranch struct {
 	Name                string  `json:"name"`
-	Longitude           string `json:"longitude" gorm:"double"` //经度
-	Latitude            string `json:"latitude" gorm:"double"`  //纬度
+	Longitude           string `json:"longitude"` //经度
+	Latitude            string `json:"latitude"`  //纬度
 	Province            string  `json:"province"`
 	City                string  `json:"city"`
 	Area                string  `json:"area"`
