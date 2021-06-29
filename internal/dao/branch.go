@@ -4,6 +4,7 @@ import (
 	"cleaner-serve/internal/models"
 	"cleaner-serve/internal/util"
 	"errors"
+	"fmt"
 )
 
 func CreateABranch(branch *models.Branch) (err error) {
@@ -35,8 +36,23 @@ func GetBranchByPages(query *models.BranchQuery) (branchList []*models.Branch, t
 	}
 	return
 }
-func GetAllBranch() (branchList []*models.Branch, err error) {
-	err = DB.Order("created desc").Find(&branchList).Error
+func GetAllBranch(query *models.AllBranchQuery) (branchList []*models.Branch, err error) {
+	db:=DB
+	if query.MinLng!=""{
+		fmt.Println("-------")
+		fmt.Println(query)
+		db=db.Where("longitude >= (?)", query.MinLng)
+	}
+	if query.MaxLng!=""{
+		db=db.Where("longitude <= (?)", query.MaxLng)
+	}
+	if query.MinLat!=""{
+		db=db.Where("latitude >= (?)", query.MinLat)
+	}
+	if query.MaxLat!=""{
+		db=db.Where("latitude <= (?)", query.MaxLat)
+	}
+	err = db.Order("created desc").Find(&branchList).Error
 	if err != nil {
 		return nil, err
 	}

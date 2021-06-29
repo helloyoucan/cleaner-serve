@@ -51,7 +51,15 @@ func GetBranchByPages(c *gin.Context)  {
 	})
 }
 func GetAllBranch(c *gin.Context)  {
-	branchList,err:=dao.GetAllBranch()
+	var query =new(models.AllBranchQuery)
+	err:=c.ShouldBind(&query)
+	if err!=nil {
+		util.RespJSON(c, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	branchList,err:=dao.GetAllBranch(query)
 	if err!=nil {
 		util.RespJSON(c, gin.H{
 			"err": err.Error(),
